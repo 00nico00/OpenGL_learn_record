@@ -2,6 +2,9 @@
 #include <GLFW/glfw3.h>
 
 #include <print>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.hpp"
 #include "glfw_wrapper.hpp"
@@ -126,8 +129,14 @@ int main() {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
 
+    glm::mat4 trans{1.0f};
+    trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+    trans =
+        glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
     our_shader.use();
     our_shader.set_float("mixValue", mix_value);
+    our_shader.set_mat4("transform", trans);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

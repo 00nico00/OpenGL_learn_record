@@ -1,5 +1,7 @@
 #include "Shader.hpp"
 
+#include "glm/gtc/type_ptr.hpp"
+
 #include <fstream>
 #include <format>
 #include <sstream>
@@ -128,6 +130,10 @@ void Shader::set_float(std::string_view name, float value) const {
 
 void Shader::set_vec3(std::string_view name, float x, float y, float z) const {
   glUniform3f(glGetUniformLocation(ID, name.data()), x, y, z);
+}
+
+void Shader::set_mat4(std::string_view name, const glm::mat4& martix) const {
+  glUniformMatrix4fv(glGetUniformLocation(ID, name.data()), 1, GL_FALSE, glm::value_ptr(martix));
 }
 
 void Shader::clear() {

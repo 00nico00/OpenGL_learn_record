@@ -56,10 +56,10 @@ void window::init_glfw() {
 }
 
 void window::terminate_glfw() {
-    if (glfw_initialized) {
-        glfwTerminate();
-        glfw_initialized = false;
-    }
+  if (glfw_initialized) {
+    glfwTerminate();
+    glfw_initialized = false;
+  }
 }
 
 bool window::should_close() const {
@@ -84,22 +84,22 @@ void window::set_title(std::string_view title) {
 }
 
 void window::show_fps() {
-    static double last_time = 0;
-    static int frame_count = 0;
-    double current_time = glfwGetTime();
-    double delta = current_time - last_time;
-    frame_count++;
+  static double last_time = 0;
+  static int frame_count = 0;
+  double current_time = glfwGetTime();
+  double delta = current_time - last_time;
+  frame_count++;
 
-    if (delta >= 0.1f) {
-        double fps = frame_count / delta;
+  if (delta >= 0.1f) {
+    double fps = frame_count / delta;
 
-        auto title_with_fps = std::format("{}, FPS: {:.2f}", m_title, fps);
+    auto title_with_fps = std::format("{}, FPS: {:.2f}", m_title, fps);
 
-        glfwSetWindowTitle(m_window, title_with_fps.c_str());
+    glfwSetWindowTitle(m_window, title_with_fps.c_str());
 
-        frame_count = 0;
-        last_time = current_time;
-    }
+    frame_count = 0;
+    last_time = current_time;
+  }
 }
 
 void window::close() {
@@ -122,19 +122,19 @@ void window::set_resize_callback(const resize_callback& callback) {
   m_resize_callback = callback;
 }
 
-int window::get_width() const {
+int window::width() const {
   return m_width;
 }
 
-int window::get_height() const {
+int window::height() const {
   return m_height;
 }
 
-float window::get_aspect_ratio() const {
+float window::aspect_ratio() const {
   return static_cast<float>(m_width) / static_cast<float>(m_height);
 }
 
-GLFWwindow* window::get_native_window() const {
+GLFWwindow* window::native_window() const {
   return m_window;
 }
 

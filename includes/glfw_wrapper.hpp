@@ -36,10 +36,10 @@ class window {
   void set_resize_callback(const resize_callback& callback);
 
   // window properties
-  int get_width() const;
-  int get_height() const;
-  float get_aspect_ratio() const;
-  GLFWwindow* get_native_window() const;
+  int width() const;
+  int height() const;
+  float aspect_ratio() const;
+  GLFWwindow* native_window() const;
 
   // check input status
   bool is_key_pressed(int key) const;

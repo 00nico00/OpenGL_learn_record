@@ -33,15 +33,24 @@ int main() {
     return -1;
   }
 
+  glm::mat4 model{1.0f};
+  model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+  glm::mat4 view{1.0f};
+  view = glm::translate(view, glm::vec3(0.0, 0.0, -3.0f));
+
+  glm::mat4 projection = glm::perspective(glm::radians(45.0f),
+                                          window.aspect_ratio(), 0.1f, 100.0f);
+
   Shader our_shader{"F:\\cpp\\opengl_learn\\shader\\vertex.sf",
                     "F:\\cpp\\opengl_learn\\shader\\fragment.sf"};
 
   float vertices[] = {
-      //location          //color     //tex coord
-      0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 2.0f, 2.0f,  // top-right
-      0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 2.0f, 0.0f,  // bottom-right
+      //location          //color           //tex coord
+      0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // top-right
+      0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // bottom-right
       -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // top-left
-      -0.5f, 0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f   // bottom-left
+      -0.5f, 0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // bottom-left
   };
 
   unsigned int indices[] = {
@@ -129,14 +138,11 @@ int main() {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
 
-    glm::mat4 trans{1.0f};
-    trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-    trans =
-        glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
     our_shader.use();
     our_shader.set_float("mixValue", mix_value);
-    our_shader.set_mat4("transform", trans);
+    our_shader.set_mat4("model", model);
+    our_shader.set_mat4("view", view);
+    our_shader.set_mat4("projection", projection);
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

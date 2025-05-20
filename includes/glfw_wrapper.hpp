@@ -13,6 +13,7 @@ class window {
   using mouse_callback = std::function<void(window*, double, double)>;
   using scroll_callback = std::function<void(window*, double, double)>;
   using resize_callback = std::function<void(window*, int, int)>;
+  using update_callback = std::function<void(window*, float)>;
 
   window(std::string_view title, int width, int height);
   ~window();
@@ -34,6 +35,7 @@ class window {
   void set_mouse_callback(const mouse_callback& callback);
   void set_scroll_callback(const scroll_callback& callback);
   void set_resize_callback(const resize_callback& callback);
+  void set_update_callback(const update_callback& callback);
 
   // window properties
   int width() const;
@@ -61,6 +63,7 @@ class window {
   mouse_callback m_mouse_callback{};
   scroll_callback m_scroll_callback{};
   resize_callback m_resize_callback{};
+  update_callback m_update_callback{};
 
   static bool glfw_initialized;
 

@@ -87,6 +87,10 @@ void window::update() {
   float current_frame = glfwGetTime();
   delta_time = current_frame - last_frame;
   last_frame = current_frame;
+
+  if (m_update_callback) {
+    m_update_callback(this, delta_time);
+  }
 }
 
 void window::close() {
@@ -107,6 +111,10 @@ void window::set_scroll_callback(const scroll_callback& callback) {
 
 void window::set_resize_callback(const resize_callback& callback) {
   m_resize_callback = callback;
+}
+
+void window::set_update_callback(const update_callback& callback) {
+  m_update_callback = callback;
 }
 
 int window::width() const {

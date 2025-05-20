@@ -34,24 +34,62 @@ int main() {
   }
 
   glm::mat4 model{1.0f};
-  model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
   glm::mat4 view{1.0f};
   view = glm::translate(view, glm::vec3(0.0, 0.0, -3.0f));
 
   glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                           window.aspect_ratio(), 0.1f, 100.0f);
 
+  glEnable(GL_DEPTH_TEST);
+
   Shader our_shader{"F:\\cpp\\opengl_learn\\shader\\vertex.sf",
                     "F:\\cpp\\opengl_learn\\shader\\fragment.sf"};
 
+  // clang-format off
   float vertices[] = {
-      //location          //color           //tex coord
-      0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // top-right
-      0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // bottom-right
-      -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // top-left
-      -0.5f, 0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // bottom-left
+      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+       0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+       0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+      -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+      -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+       0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+       0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+       0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+       0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+       0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+       0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+       0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+       0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+      -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
   };
+  // clang-format on
 
   unsigned int indices[] = {
       0, 1, 3,  // first triangle
@@ -73,16 +111,12 @@ int main() {
                GL_STATIC_DRAW);
 
   // position attribute
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
-  // color attribute
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
+  // texture coord attribute
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
                         (void*)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
-  // texture coord attribute
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
-                        (void*)(6 * sizeof(float)));
-  glEnableVertexAttribArray(2);
 
   unsigned int texture1, texture2;
   glGenTextures(1, &texture1);
@@ -131,12 +165,15 @@ int main() {
 
   while (!window.should_close()) {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
+
+    model = glm::rotate(model, (float)glfwGetTime() * 0.01f,
+                        glm::vec3(0.5f, 1.0f, 0.0f));
 
     our_shader.use();
     our_shader.set_float("mixValue", mix_value);
@@ -145,7 +182,7 @@ int main() {
     our_shader.set_mat4("projection", projection);
 
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 
     window.swap_buffers();
     window.poll_events();

@@ -12,12 +12,24 @@
 #include "stb_image.h"
 
 static float mix_value = 0.2;
+constexpr static float speed = 2.5f;
+
+bool first_mouse = true;
+float last_x = 800.0f / 2.0;
+float last_y = 600.0 / 2.0;
+float yaw = -90.0f;  // to -Z, if 0 degree, to X
+float pitch = 0.0f;
 
 int main() {
   glfw::window window{"Learn OpenGL", 800, 600};
+  window.disable_cursor();
+
+  glm::vec3 camera_pos{0.0f, 0.0f, 3.0f};
+  glm::vec3 camera_up{0.0f, 1.0f, 0.0f};
+  glm::vec3 camera_front{1.0f};
 
   window.set_key_callback(
-      [](glfw::window* self, int key, int scancode, int action, int mods) {
+      [&](glfw::window* self, int key, int scancode, int action, int mods) {
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
           self->set_should_close();
 
@@ -28,14 +40,63 @@ int main() {
           mix_value = 0.8;
       });
 
+  window.set_update_callback([&](glfw::window* self, float delta_time) {
+    float camera_speed = speed;
+    if (self->delta_time > 0)
+      camera_speed *= self->delta_time;
+
+    if (self->is_key_pressed(GLFW_KEY_W))
+      camera_pos += camera_speed * camera_front;
+    if (self->is_key_pressed(GLFW_KEY_S))
+      camera_pos -= camera_speed * camera_front;
+    if (self->is_key_pressed(GLFW_KEY_A))
+      camera_pos -=
+          glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
+    if (self->is_key_pressed(GLFW_KEY_D))
+      camera_pos +=
+          glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
+  });
+
+  window.set_mouse_callback(
+      [&](glfw::window* self, double xpos_in, double ypos_in) {
+        auto xpos = static_cast<float>(xpos_in);
+        auto ypos = static_cast<float>(ypos_in);
+
+        if (first_mouse) {
+          last_x = xpos;
+          last_y = ypos;
+          first_mouse = false;
+        }
+
+        float x_offset = xpos - last_x;
+        float y_offset = last_y - ypos;
+        last_x = xpos;
+        last_y = ypos;
+
+        float sensitivity = 0.1f;
+        x_offset *= sensitivity;
+        y_offset *= sensitivity;
+
+        yaw += x_offset;
+        pitch += y_offset;
+
+        if (pitch > 89.0f)
+          pitch = 89.0f;
+        if (pitch < -89.0f)
+          pitch = -89.0f;
+
+        camera_front.x =
+            std::cos(glm::radians(yaw)) * std::cos(glm::radians(pitch));
+        camera_front.y = std::sin(glm::radians(pitch));
+        camera_front.z =
+            std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
+        camera_front = glm::normalize(camera_front);
+      });
+
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
     std::println("Failed to initialize GLAD");
     return -1;
   }
-
-  glm::mat4 model{1.0f};
-  glm::mat4 view{1.0f};
-  view = glm::translate(view, glm::vec3(0.0, 0.0, -3.0f));
 
   glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                           window.aspect_ratio(), 0.1f, 100.0f);
@@ -91,24 +152,29 @@ int main() {
   };
   // clang-format on
 
-  unsigned int indices[] = {
-      0, 1, 3,  // first triangle
-      1, 2, 3   // second triangle
+  // clang-format off
+  glm::vec3 cube_positions[] = {
+      glm::vec3( 0.0f,  0.0f,  0.0f),
+      glm::vec3( 2.0f,  5.0f, -15.0f),
+      glm::vec3(-1.5f, -2.2f, -2.5f),
+      glm::vec3(-3.8f, -2.0f, -12.3f),
+      glm::vec3( 2.4f, -0.4f, -3.5f),
+      glm::vec3(-1.7f,  3.0f, -7.5f),
+      glm::vec3( 1.3f, -2.0f, -2.5f),
+      glm::vec3( 1.5f,  2.0f, -2.5f),
+      glm::vec3( 1.5f,  0.2f, -1.5f),
+      glm::vec3(-1.3f,  1.0f, -1.5f)
   };
+  // clang-format on
 
-  unsigned int VBO, VAO, EBO;
+  unsigned int VBO, VAO;
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
-  glGenBuffers(1, &EBO);
 
   glBindVertexArray(VAO);
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
-               GL_STATIC_DRAW);
 
   // position attribute
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -162,8 +228,10 @@ int main() {
   our_shader.use();
   our_shader.set_int("texture1", 0);
   our_shader.set_int("texture2", 1);
+  our_shader.set_mat4("projection", projection);
 
   while (!window.should_close()) {
+    window.update();
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -172,26 +240,31 @@ int main() {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
 
-    model = glm::rotate(model, (float)glfwGetTime() * 0.01f,
-                        glm::vec3(0.5f, 1.0f, 0.0f));
-
     our_shader.use();
     our_shader.set_float("mixValue", mix_value);
-    our_shader.set_mat4("model", model);
+
+    glm::mat4 view{1.0f};
+    view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
     our_shader.set_mat4("view", view);
-    our_shader.set_mat4("projection", projection);
 
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    for (uint32_t i = 0; i < 10; i++) {
+      glm::mat4 model{1.0f};
+      model = glm::translate(model, cube_positions[i]);
+      float angle = 20.0f * i;
+      model =
+          glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+      our_shader.set_mat4("model", model);
+
+      glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
 
     window.swap_buffers();
     window.poll_events();
-    window.show_fps();
   }
 
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
-  glDeleteBuffers(1, &EBO);
 
   return 0;
 }

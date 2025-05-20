@@ -29,6 +29,7 @@ class window {
   void set_title(std::string_view title);
   void update();
   void close();
+  void disable_cursor();
 
   // callback
   void set_key_callback(const key_callback& callback);
@@ -70,14 +71,14 @@ class window {
   static void init_glfw();
   static void terminate_glfw();
 
-  static void key_callback_wrapper(GLFWwindow* window, int key, int scancode,
-                                   int action, int mods);
-  static void cursor_pos_callback_wrapper(GLFWwindow* window, double xpos,
+  static void key_callback_wrapper(GLFWwindow* glfw_window, int key,
+                                   int scancode, int action, int mods);
+  static void cursor_pos_callback_wrapper(GLFWwindow* glfw_window, double xpos,
                                           double ypos);
-  static void scroll_callback_wrapper(GLFWwindow* window, double xoffset,
+  static void scroll_callback_wrapper(GLFWwindow* glfw_window, double xoffset,
                                       double yoffset);
-  static void framebuffer_size_callback_wrapper(GLFWwindow* window, int width,
-                                                int height);
+  static void framebuffer_size_callback_wrapper(GLFWwindow* glfw_window,
+                                                int width, int height);
 };
 
 }  // namespace glfw

@@ -97,6 +97,10 @@ void window::close() {
   glfwSetWindowShouldClose(m_window, true);
 }
 
+void window::disable_cursor() {
+  glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
 void window::set_key_callback(const key_callback& callback) {
   m_key_callback = callback;
 }

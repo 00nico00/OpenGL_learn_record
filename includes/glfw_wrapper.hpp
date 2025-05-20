@@ -26,7 +26,7 @@ class window {
   void swap_buffers();
   void poll_events();
   void set_title(std::string_view title);
-  void show_fps();
+  void update();
   void close();
 
   // callback
@@ -45,6 +45,10 @@ class window {
   bool is_key_pressed(int key) const;
   bool is_mouse_button_pressed(int button) const;
   void get_cursor_pos(double& xpos, double& ypos) const;
+
+ public:
+  float delta_time{};
+  float last_frame{};
 
  private:
   GLFWwindow* m_window{};

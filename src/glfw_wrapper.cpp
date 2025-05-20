@@ -83,23 +83,10 @@ void window::set_title(std::string_view title) {
   glfwSetWindowTitle(m_window, m_title.data());
 }
 
-void window::show_fps() {
-  static double last_time = 0;
-  static int frame_count = 0;
-  double current_time = glfwGetTime();
-  double delta = current_time - last_time;
-  frame_count++;
-
-  if (delta >= 0.1f) {
-    double fps = frame_count / delta;
-
-    auto title_with_fps = std::format("{}, FPS: {:.2f}", m_title, fps);
-
-    glfwSetWindowTitle(m_window, title_with_fps.c_str());
-
-    frame_count = 0;
-    last_time = current_time;
-  }
+void window::update() {
+  float current_frame = glfwGetTime();
+  delta_time = current_frame - last_frame;
+  last_frame = current_frame;
 }
 
 void window::close() {

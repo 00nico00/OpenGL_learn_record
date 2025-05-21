@@ -7,11 +7,13 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories("./includes")
+include_directories("./third_party")
 
 set(COMMON_SRCS
     src/Shader.cpp
     src/glfw_wrapper.cpp
     src/Camera.cpp
+    src/glad_wrapper.cpp
 )
 
 find_package(glfw3 CONFIG REQUIRED)

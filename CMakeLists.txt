@@ -13,6 +13,7 @@ set(SRCS
   src/main.cpp
   src/Shader.cpp
   src/glfw_wrapper.cpp
+  src/Camera.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SRCS})

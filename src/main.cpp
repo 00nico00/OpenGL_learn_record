@@ -1,15 +1,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include <print>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Shader.hpp"
-#include "glfw_wrapper.hpp"
+#include <print>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#include "Shader.hpp"
+#include "glfw_wrapper.hpp"
+#include "Camera.hpp"
 
 static float mix_value = 0.2;
 constexpr static float speed = 2.5f;
@@ -17,16 +19,12 @@ constexpr static float speed = 2.5f;
 bool first_mouse = true;
 float last_x = 800.0f / 2.0;
 float last_y = 600.0 / 2.0;
-float yaw = -90.0f;  // to -Z, if 0 degree, to X
-float pitch = 0.0f;
 
 int main() {
   glfw::window window{"Learn OpenGL", 800, 600};
   window.disable_cursor();
 
-  glm::vec3 camera_pos{0.0f, 0.0f, 3.0f};
-  glm::vec3 camera_up{0.0f, 1.0f, 0.0f};
-  glm::vec3 camera_front{1.0f};
+  Camera camera{glm::vec3{0.0f, 0.0f, 3.0f}};
 
   window.set_key_callback(
       [&](glfw::window* self, int key, int scancode, int action, int mods) {
@@ -46,15 +44,13 @@ int main() {
       camera_speed *= self->delta_time;
 
     if (self->is_key_pressed(GLFW_KEY_W))
-      camera_pos += camera_speed * camera_front;
+      camera.process_keyboard(CameraMovement::Forward, delta_time);
     if (self->is_key_pressed(GLFW_KEY_S))
-      camera_pos -= camera_speed * camera_front;
+      camera.process_keyboard(CameraMovement::Backward, delta_time);
     if (self->is_key_pressed(GLFW_KEY_A))
-      camera_pos -=
-          glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
+      camera.process_keyboard(CameraMovement::Left, delta_time);
     if (self->is_key_pressed(GLFW_KEY_D))
-      camera_pos +=
-          glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
+      camera.process_keyboard(CameraMovement::Right, delta_time);
   });
 
   window.set_mouse_callback(
@@ -73,33 +69,18 @@ int main() {
         last_x = xpos;
         last_y = ypos;
 
-        float sensitivity = 0.1f;
-        x_offset *= sensitivity;
-        y_offset *= sensitivity;
+        camera.process_mouse_movement(x_offset, y_offset);
+      });
 
-        yaw += x_offset;
-        pitch += y_offset;
-
-        if (pitch > 89.0f)
-          pitch = 89.0f;
-        if (pitch < -89.0f)
-          pitch = -89.0f;
-
-        camera_front.x =
-            std::cos(glm::radians(yaw)) * std::cos(glm::radians(pitch));
-        camera_front.y = std::sin(glm::radians(pitch));
-        camera_front.z =
-            std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
-        camera_front = glm::normalize(camera_front);
+  window.set_scroll_callback(
+      [&](glfw::window* self, double x_offset, double y_offset) {
+        camera.process_mouse_scroll(static_cast<float>(y_offset));
       });
 
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
     std::println("Failed to initialize GLAD");
     return -1;
   }
-
-  glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-                                          window.aspect_ratio(), 0.1f, 100.0f);
 
   glEnable(GL_DEPTH_TEST);
 
@@ -228,7 +209,6 @@ int main() {
   our_shader.use();
   our_shader.set_int("texture1", 0);
   our_shader.set_int("texture2", 1);
-  our_shader.set_mat4("projection", projection);
 
   while (!window.should_close()) {
     window.update();
@@ -243,9 +223,11 @@ int main() {
     our_shader.use();
     our_shader.set_float("mixValue", mix_value);
 
-    glm::mat4 view{1.0f};
-    view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
-    our_shader.set_mat4("view", view);
+    glm::mat4 projection = glm::perspective(
+        glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
+    our_shader.set_mat4("projection", projection);
+
+    our_shader.set_mat4("view", camera.view_matrix());
 
     glBindVertexArray(VAO);
     for (uint32_t i = 0; i < 10; i++) {

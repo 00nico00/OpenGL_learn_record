@@ -5,11 +5,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <print>
+#include <vector>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 #include "Shader.hpp"
+#include <glad_wrapper.hpp>
 #include "glfw_wrapper.hpp"
 #include "Camera.hpp"
 
@@ -148,22 +150,17 @@ int main() {
   };
   // clang-format on
 
-  unsigned int VBO, VAO;
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
+  std::vector<glad::VertexAttribute> v_layout;
+  v_layout.push_back(glad::VertexAttribute{
+      .index = 0, .name = "Position", .type = glad::ArrtibuteType::Position});
 
-  glBindVertexArray(VAO);
+  v_layout.push_back(glad::VertexAttribute{
+      .index = 1, .name = "TexCoords", .type = glad::ArrtibuteType::TexCoords});
 
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glad::VertexArray vao{};
+  vao.bind();
 
-  // position attribute
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
-  // texture coord attribute
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                        (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
+  vao.set_vbo(vertices, std::make_shared<glad::VertexBufferLayout>(v_layout));
 
   unsigned int texture1, texture2;
   glGenTextures(1, &texture1);
@@ -229,7 +226,7 @@ int main() {
 
     our_shader.set_mat4("view", camera.view_matrix());
 
-    glBindVertexArray(VAO);
+    vao.bind();
     for (uint32_t i = 0; i < 10; i++) {
       glm::mat4 model{1.0f};
       model = glm::translate(model, cube_positions[i]);
@@ -238,15 +235,12 @@ int main() {
           glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
       our_shader.set_mat4("model", model);
 
-      glDrawArrays(GL_TRIANGLES, 0, 36);
+      vao.draw_arrays(glad::DrawMode::Triangles, 0, 36);
     }
 
     window.swap_buffers();
     window.poll_events();
   }
-
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
 
   return 0;
 }

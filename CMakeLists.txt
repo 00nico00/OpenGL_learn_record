@@ -9,14 +9,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories("./includes")
 
-set(SRCS
-  src/main.cpp
+set(CAMERA_SRCS
+  src/camera_main.cpp
   src/Shader.cpp
   src/glfw_wrapper.cpp
   src/Camera.cpp
 )
 
-add_executable(${PROJECT_NAME} ${SRCS})
+
+
+add_executable(${PROJECT_NAME} ${CAMERA_SRCS})
 
 find_package(glfw3 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)

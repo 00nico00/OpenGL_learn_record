@@ -84,8 +84,8 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
-  Shader our_shader{"F:\\cpp\\opengl_learn\\shader\\vertex.sf",
-                    "F:\\cpp\\opengl_learn\\shader\\fragment.sf"};
+  Shader our_shader{"F:\\cpp\\opengl_learn\\shader\\camera\\vertex.sf",
+                    "F:\\cpp\\opengl_learn\\shader\\camera\\fragment.sf"};
 
   // clang-format off
   float vertices[] = {

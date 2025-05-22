@@ -1,19 +1,19 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <stb_image.h>
 
-#include <print>
 #include <vector>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 #include "Shader.hpp"
-#include <glad_wrapper.hpp>
+#include "glad_wrapper.hpp"
 #include "glfw_wrapper.hpp"
 #include "Camera.hpp"
+#include "Logger.hpp"
+#include "Guard.hpp"
 
 static float mix_value = 0.2;
 constexpr static float speed = 2.5f;
@@ -23,6 +23,11 @@ float last_x = 800.0f / 2.0;
 float last_y = 600.0 / 2.0;
 
 int main() {
+  Logger::init("camera");
+  Guard guard{[] {
+    Logger::shutdown();
+  }};
+
   glfw::window window{"Learn OpenGL", 800, 600};
   window.disable_cursor();
 
@@ -80,7 +85,7 @@ int main() {
       });
 
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
-    std::println("Failed to initialize GLAD");
+    spdlog::error("Failed to initialize GLAD");
     return -1;
   }
 
@@ -181,7 +186,7 @@ int main() {
                  GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
   } else {
-    std::println(stderr, "Failed to load texture");
+    spdlog::error("Failed to load texture");
   }
   stbi_image_free(data);
 
@@ -199,7 +204,7 @@ int main() {
                  GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
   } else {
-    std::println(stderr, "Failed to load texture");
+    spdlog::error("Failed to load texture");
   }
   stbi_image_free(data);
 

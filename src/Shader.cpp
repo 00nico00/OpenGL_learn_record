@@ -1,11 +1,11 @@
 #include "Shader.hpp"
 
-#include "glm/gtc/type_ptr.hpp"
+#include <glm/gtc/type_ptr.hpp>
+#include <spdlog/spdlog.h>
 
 #include <fstream>
 #include <format>
 #include <sstream>
-#include <print>
 
 Shader::~Shader() {
   clear();
@@ -18,8 +18,7 @@ Shader::Shader(std::string_view vertex_path, std::string_view fragment_path) {
     vertex_code = read_file(vertex_path);
     fragment_code = read_file(fragment_path);
   } catch (const std::exception& e) {
-    std::println(stderr, "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: {}",
-                 e.what());
+    spdlog::error("ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: {}", e.what());
     return;
   }
 
@@ -29,24 +28,21 @@ Shader::Shader(std::string_view vertex_path, std::string_view fragment_path) {
   try {
     vertex = compile_shader(ShaderType::Vertex, vertex_code.data());
   } catch (std::exception& e) {
-    std::println(stderr, "ERROR::SHADER::VERTEX::COMPILATION_FAILED:\n{}",
-                 e.what());
+    spdlog::error("ERROR::SHADER::VERTEX::COMPILATION_FAILED:\n{}", e.what());
     return;
   }
 
   try {
     fragment = compile_shader(ShaderType::Fragment, fragment_code.c_str());
   } catch (std::exception& e) {
-    std::println(stderr, "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED:\n{}",
-                 e.what());
+    spdlog::error("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED:\n{}", e.what());
     return;
   }
 
   try {
     link_shader(ID, vertex, fragment);
   } catch (std::exception& e) {
-    std::println(stderr, "ERROR::SHADER::PROGRAM::LINKING_FAILED:\n{}",
-                 e.what());
+    spdlog::error("ERROR::SHADER::PROGRAM::LINKING_FAILED:\n{}", e.what());
     return;
   }
 
@@ -133,7 +129,8 @@ void Shader::set_vec3(std::string_view name, float x, float y, float z) const {
 }
 
 void Shader::set_mat4(std::string_view name, const glm::mat4& martix) const {
-  glUniformMatrix4fv(glGetUniformLocation(ID, name.data()), 1, GL_FALSE, glm::value_ptr(martix));
+  glUniformMatrix4fv(glGetUniformLocation(ID, name.data()), 1, GL_FALSE,
+                     glm::value_ptr(martix));
 }
 
 void Shader::clear() {

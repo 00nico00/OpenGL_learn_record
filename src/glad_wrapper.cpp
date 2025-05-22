@@ -137,3 +137,11 @@ void VertexArray::config_arrtibute_pointer() {
 void VertexArray::draw_arrays(DrawMode mode, GLint first, GLsizei count) const {
   glDrawArrays(draw_mode_map.at(mode), first, count);
 }
+
+auto VertexArray::vbo() const -> std::shared_ptr<VertexBuffer> {
+  return vertex_buffer_;
+}
+
+auto VertexArray::ebo() const -> std::shared_ptr<IndexBuffer> {
+  return index_buffer_;
+}

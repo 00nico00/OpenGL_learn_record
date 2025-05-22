@@ -1,7 +1,6 @@
 #include "glfw_wrapper.hpp"
 
-#include <print>
-#include <format>
+#include <spdlog/spdlog.h>
 
 using namespace glfw;
 
@@ -22,7 +21,7 @@ window::window(std::string_view title, int width, int height)
   m_window =
       glfwCreateWindow(m_width, m_height, m_title.data(), nullptr, nullptr);
   if (!m_window) {
-    std::println(stderr, "Failed to create GLFW window");
+    spdlog::error("Failed to create GLFW window");
     terminate_glfw();
     return;
   }
@@ -48,7 +47,7 @@ window::~window() {
 void window::init_glfw() {
   if (!glfw_initialized) {
     if (!glfwInit()) {
-      std::println(stderr, "Failed to initialize GLFW");
+      spdlog::error("Failed to initialize GLFW");
       return;
     }
     glfw_initialized = true;

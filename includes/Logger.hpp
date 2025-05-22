@@ -17,7 +17,7 @@ class Logger {
         fs::create_directory(log_dir);
       }
 
-      std::string log_file = (log_dir / log_name / ".log").string();
+      std::string log_file = (log_dir / fmt::format("{}.log", log_name)).string();
 
       auto console_sink =
           std::make_shared<spdlog::sinks::stdout_color_sink_mt>();

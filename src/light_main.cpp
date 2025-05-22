@@ -75,10 +75,10 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
-  Shader lighting_shader{"../shader/light/color_vertex.sf",
-                         "../shader/light/color_fragment.sf"};
-  Shader lightcube_shader{"../shader/light/light_cube_vertex.sf",
-                          "../shader/light/light_cube_fragment.sf"};
+  Shader lighting_shader{"../shader/light/color.vert",
+                         "../shader/light/color.frag"};
+  Shader lightcube_shader{"../shader/light/light_cube.vert",
+                          "../shader/light/light_cube.frag"};
 
   // clang-format off
   float vertices[] = {

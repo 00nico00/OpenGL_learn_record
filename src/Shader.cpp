@@ -128,6 +128,10 @@ void Shader::set_vec3(std::string_view name, float x, float y, float z) const {
   glUniform3f(glGetUniformLocation(ID, name.data()), x, y, z);
 }
 
+void Shader::set_vec3(std::string_view name, const glm::vec3& vec) const {
+  glUniform3fv(glGetUniformLocation(ID, name.data()), 1, glm::value_ptr(vec));
+}
+
 void Shader::set_mat4(std::string_view name, const glm::mat4& martix) const {
   glUniformMatrix4fv(glGetUniformLocation(ID, name.data()), 1, GL_FALSE,
                      glm::value_ptr(martix));

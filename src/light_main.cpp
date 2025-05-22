@@ -82,53 +82,54 @@ int main() {
 
   // clang-format off
   float vertices[] = {
-    -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-    -0.5f, -0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-    -0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-    -0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-    -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-    -0.5f, -0.5f,  0.5f,
-    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-    -0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
   };
   // clang-format on
 
   auto layout = std::make_shared<glad::VertexBufferLayout>(
       std::vector<glad::VertexAttribute>{
-          {0, "Position", glad::ArrtibuteType::Position}});
+          {0, "Position", glad::ArrtibuteType::Position},
+          {1, "Normal", glad::ArrtibuteType::Normal}});
 
   glad::VertexArray cube_vao{};
   cube_vao.bind();
@@ -147,6 +148,8 @@ int main() {
     lighting_shader.use();
     lighting_shader.set_vec3("objectColor", 1.0f, 0.5f, 0.31f);
     lighting_shader.set_vec3("lightColor", 1.0f, 1.0f, 1.0f);
+    lighting_shader.set_vec3("lightPos", light_pos);
+    lighting_shader.set_vec3("viewPos", camera.position_);
 
     glm::mat4 projection = glm::perspective(
         glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);

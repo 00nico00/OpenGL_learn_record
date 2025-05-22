@@ -75,12 +75,10 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
-  Shader lighting_shader{
-      "F:\\cpp\\opengl_learn\\shader\\light\\color_vertex.sf",
-      "F:\\cpp\\opengl_learn\\shader\\light\\color_fragment.sf"};
-  Shader lightcube_shader{
-      "F:\\cpp\\opengl_learn\\shader\\light\\light_cube_vertex.sf",
-      "F:\\cpp\\opengl_learn\\shader\\light\\light_cube_fragment.sf"};
+  Shader lighting_shader{"../shader/light/color_vertex.sf",
+                         "../shader/light/color_fragment.sf"};
+  Shader lightcube_shader{"../shader/light/light_cube_vertex.sf",
+                          "../shader/light/light_cube_fragment.sf"};
 
   // clang-format off
   float vertices[] = {

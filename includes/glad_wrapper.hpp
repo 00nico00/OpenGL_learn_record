@@ -99,6 +99,9 @@ class VertexArray {
 
   void draw_arrays(DrawMode mode, GLint first, GLsizei count) const;
 
+  auto vbo() const -> std::shared_ptr<VertexBuffer>;
+  auto ebo() const -> std::shared_ptr<IndexBuffer>;
+
  private:
   unsigned int ID{};
   std::shared_ptr<VertexBuffer> vertex_buffer_{nullptr};

@@ -151,6 +151,15 @@ int main() {
     lighting_shader.set_vec3("lightPos", light_pos);
     lighting_shader.set_vec3("viewPos", camera.position_);
 
+    lighting_shader.set_vec3("material.ambient", 1.0f, 0.5f, 0.31f);
+    lighting_shader.set_vec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+    lighting_shader.set_vec3("material.specular", 0.5f, 0.5f, 0.5f);
+    lighting_shader.set_float("material.shininess", 32.0f);
+
+    lighting_shader.set_vec3("light.ambient", 0.2f, 0.2f, 0.2f);
+    lighting_shader.set_vec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+    lighting_shader.set_vec3("light.specular", 1.0f, 1.0f, 1.0f);
+
     glm::mat4 projection = glm::perspective(
         glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
     glm::mat4 view = camera.view_matrix();

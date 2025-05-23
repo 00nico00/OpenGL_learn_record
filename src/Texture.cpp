@@ -24,7 +24,7 @@ Texture::Texture(TextureArgs args) {
 
     GLint internal_format = texture_format(args.internal_format);
     GLint format = texture_format(args.format);
-    unit_index = init_unit_index();
+    unit_index_ = init_unit_index();
 
     glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width_, height_, 0, format,
                  GL_UNSIGNED_BYTE, data);
@@ -45,12 +45,16 @@ Texture::~Texture() {
 }
 
 void Texture::bind() const {
-  glActiveTexture(GL_TEXTURE0 + unit_index);
+  glActiveTexture(GL_TEXTURE0 + unit_index_);
   glBindTexture(GL_TEXTURE_2D, texture_id_);
 }
 
 GLuint Texture::id() const {
   return texture_id_;
+}
+
+int Texture::unit_index() const {
+  return unit_index_;
 }
 
 GLint Texture::texture_format(TextureFormat format) {

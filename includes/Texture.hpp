@@ -28,13 +28,14 @@ class Texture {
 
   void bind() const;
   GLuint id() const;
+  int unit_index() const;
 
  private:
   GLuint texture_id_{};
   int width_{};
   int height_{};
   int nr_channels_{};
-  int unit_index{};
+  int unit_index_{};
 
   GLint texture_format(TextureFormat format);
   static int init_unit_index();

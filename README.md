@@ -16,3 +16,4 @@
 + `target`: `light`
 + `main`: `light_main.cpp`
 + 封装了 `VAO`, `VBO`, `EBO`
++ 封装了 `Texture`

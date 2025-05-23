@@ -1,10 +1,8 @@
-#define STB_IMAGE_IMPLEMENTATION
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <stb_image.h>
 
 #include <vector>
 
@@ -14,6 +12,7 @@
 #include "Camera.hpp"
 #include "Logger.hpp"
 #include "Guard.hpp"
+#include "Texture.hpp"
 
 static float mix_value = 0.2;
 constexpr static float speed = 2.5f;
@@ -167,46 +166,25 @@ int main() {
 
   vao.set_vbo(vertices, std::make_shared<glad::VertexBufferLayout>(v_layout));
 
-  unsigned int texture1, texture2;
-  glGenTextures(1, &texture1);
-  glBindTexture(GL_TEXTURE_2D, texture1);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  Texture texture1{
+      TextureArgs{.path = "F:\\cpp\\opengl_learn\\Textures\\container.jpg",
+                  .internal_format = TextureFormat::RGB,
+                  .format = TextureFormat::RGB,
+                  .generate_mipmap = true,
+                  .min_filter = GL_LINEAR,
+                  .mag_filter = GL_LINEAR,
+                  .wrap_s = GL_REPEAT,
+                  .wrap_t = GL_REPEAT}};
 
-  int width, height, nr_channels;
-  stbi_set_flip_vertically_on_load(true);
-  unsigned char* data =
-      stbi_load("F:\\cpp\\opengl_learn\\Textures\\container.jpg", &width,
-                &height, &nr_channels, 0);
-
-  if (data) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
-    spdlog::error("Failed to load texture");
-  }
-  stbi_image_free(data);
-
-  glGenTextures(1, &texture2);
-  glBindTexture(GL_TEXTURE_2D, texture2);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  data = stbi_load("F:\\cpp\\opengl_learn\\Textures\\awesomeface.png", &width,
-                   &height, &nr_channels, 0);
-  if (data) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
-    spdlog::error("Failed to load texture");
-  }
-  stbi_image_free(data);
+  Texture texture2{
+      TextureArgs{.path = "F:\\cpp\\opengl_learn\\Textures\\awesomeface.png",
+                  .internal_format = TextureFormat::RGBA,
+                  .format = TextureFormat::RGBA,
+                  .generate_mipmap = true,
+                  .min_filter = GL_LINEAR,
+                  .mag_filter = GL_LINEAR,
+                  .wrap_s = GL_REPEAT,
+                  .wrap_t = GL_REPEAT}};
 
   our_shader.use();
   our_shader.set_int("texture1", 0);
@@ -217,10 +195,8 @@ int main() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture2);
+    texture1.bind();
+    texture2.bind();
 
     our_shader.use();
     our_shader.set_float("mixValue", mix_value);

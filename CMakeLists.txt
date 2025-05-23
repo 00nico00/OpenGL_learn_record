@@ -10,23 +10,24 @@ include_directories("./includes")
 include_directories("./third_party")
 
 set(COMMON_SRCS
-    src/Shader.cpp
-    src/glfw_wrapper.cpp
-    src/Camera.cpp
-    src/glad_wrapper.cpp
+  src/Shader.cpp
+  src/glfw_wrapper.cpp
+  src/Camera.cpp
+  src/glad_wrapper.cpp
+  src/Texture.cpp
 )
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 
 add_executable(camera
-    src/camera_main.cpp
-    ${COMMON_SRCS}
+  src/camera_main.cpp
+  ${COMMON_SRCS}
 )
 target_link_libraries(camera PRIVATE glfw glad::glad)
 
 add_executable(light
-    src/light_main.cpp
-    ${COMMON_SRCS}
+  src/light_main.cpp
+  ${COMMON_SRCS}
 )
 target_link_libraries(light PRIVATE glfw glad::glad)

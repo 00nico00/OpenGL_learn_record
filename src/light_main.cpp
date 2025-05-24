@@ -142,13 +142,20 @@ int main() {
   lightcube_vao.bind();
   lightcube_vao.set_vbo(cube_vao.vbo());
 
-  Texture texture{TextureArgs{.path = "../Textures/container2.png",
-                              .internal_format = TextureFormat::RGBA,
-                              .format = TextureFormat::RGBA,
-                              .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
+  Texture diffuse_texture{TextureArgs{.path = "../Textures/container2.png",
+                                      .internal_format = TextureFormat::RGBA,
+                                      .format = TextureFormat::RGBA,
+                                      .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
+
+  Texture specular_texture{
+      TextureArgs{.path = "../Textures/container2_specular.png",
+                  .internal_format = TextureFormat::RGBA,
+                  .format = TextureFormat::RGBA,
+                  .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
 
   lighting_shader.use();
-  lighting_shader.set_int("material.diffuse", texture.unit_index());
+  lighting_shader.set_int("material.diffuse", diffuse_texture.unit_index());
+  lighting_shader.set_int("material.specular", specular_texture.unit_index());
 
   while (!window.should_close()) {
     window.update();
@@ -157,12 +164,9 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     lighting_shader.use();
-    lighting_shader.set_vec3("objectColor", 1.0f, 0.5f, 0.31f);
-    lighting_shader.set_vec3("lightColor", 1.0f, 1.0f, 1.0f);
-    lighting_shader.set_vec3("lightPos", light_pos);
+    lighting_shader.set_vec3("light.position", light_pos);
     lighting_shader.set_vec3("viewPos", camera.position_);
 
-    lighting_shader.set_vec3("material.specular", 0.5f, 0.5f, 0.5f);
     lighting_shader.set_float("material.shininess", 64.0f);
 
     lighting_shader.set_vec3("light.ambient", 0.2f, 0.2f, 0.2f);
@@ -188,6 +192,9 @@ int main() {
     model = glm::translate(model, light_pos);
     model = glm::scale(model, glm::vec3{0.2f});
     lightcube_shader.set_mat4("model", model);
+
+    diffuse_texture.bind();
+    specular_texture.bind();
 
     lightcube_vao.bind();
     lightcube_vao.draw_arrays(glad::DrawMode::Triangles, 0, 36);

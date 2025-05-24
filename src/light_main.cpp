@@ -153,9 +153,15 @@ int main() {
                   .format = TextureFormat::RGBA,
                   .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
 
+  Texture emission_texture{TextureArgs{.path = "../Textures/matrix.jpg",
+                                       .internal_format = TextureFormat::RGB,
+                                       .format = TextureFormat::RGB,
+                                       .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
+
   lighting_shader.use();
   lighting_shader.set_int("material.diffuse", diffuse_texture.unit_index());
   lighting_shader.set_int("material.specular", specular_texture.unit_index());
+  lighting_shader.set_int("material.emission", emission_texture.unit_index());
 
   while (!window.should_close()) {
     window.update();
@@ -195,6 +201,7 @@ int main() {
 
     diffuse_texture.bind();
     specular_texture.bind();
+    emission_texture.bind();
 
     lightcube_vao.bind();
     lightcube_vao.draw_arrays(glad::DrawMode::Triangles, 0, 36);

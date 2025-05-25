@@ -167,7 +167,8 @@ int main() {
   vao.set_vbo(vertices, std::make_shared<glad::VertexBufferLayout>(v_layout));
 
   Texture texture1{
-      TextureArgs{.path = "F:\\cpp\\opengl_learn\\Textures\\container.jpg",
+      TextureArgs{.uniform_name = "texture1",
+                  .path = "F:\\cpp\\opengl_learn\\Textures\\container.jpg",
                   .internal_format = TextureFormat::RGB,
                   .format = TextureFormat::RGB,
                   .generate_mipmap = true,
@@ -177,7 +178,8 @@ int main() {
                   .wrap_t = GL_REPEAT}};
 
   Texture texture2{
-      TextureArgs{.path = "F:\\cpp\\opengl_learn\\Textures\\awesomeface.png",
+      TextureArgs{.uniform_name = "texture2",
+                  .path = "F:\\cpp\\opengl_learn\\Textures\\awesomeface.png",
                   .internal_format = TextureFormat::RGBA,
                   .format = TextureFormat::RGBA,
                   .generate_mipmap = true,
@@ -187,8 +189,8 @@ int main() {
                   .wrap_t = GL_REPEAT}};
 
   our_shader.use();
-  our_shader.set_int("texture1", 0);
-  our_shader.set_int("texture2", 1);
+  our_shader.set_int(texture1.unform_name(), texture1.unit_index());
+  our_shader.set_int(texture2.unform_name(), texture2.unit_index());
 
   while (!window.should_close()) {
     window.update();

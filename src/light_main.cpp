@@ -162,20 +162,22 @@ int main() {
   lightcube_vao.bind();
   lightcube_vao.set_vbo(cube_vao.vbo());
 
-  Texture diffuse_texture{TextureArgs{.path = "../Textures/container2.png",
+  Texture diffuse_texture{TextureArgs{.uniform_name = "material.diffuse",
+                                      .path = "../Textures/container2.png",
                                       .internal_format = TextureFormat::RGBA,
                                       .format = TextureFormat::RGBA,
                                       .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
 
   Texture specular_texture{
-      TextureArgs{.path = "../Textures/container2_specular.png",
+      TextureArgs{.uniform_name = "material.specular",
+                  .path = "../Textures/container2_specular.png",
                   .internal_format = TextureFormat::RGBA,
                   .format = TextureFormat::RGBA,
                   .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
 
   lighting_shader.use();
-  lighting_shader.set_int("material.diffuse", diffuse_texture.unit_index());
-  lighting_shader.set_int("material.specular", specular_texture.unit_index());
+  lighting_shader.set_int(diffuse_texture.unform_name(), diffuse_texture.unit_index());
+  lighting_shader.set_int(specular_texture.unform_name(), specular_texture.unit_index());
 
   while (!window.should_close()) {
     window.update();
@@ -195,19 +197,19 @@ int main() {
 
     for (int i = 0; i < 4; i++) {
       lighting_shader.set_vec3(std::format("pointLights[{}].position", i),
-                                point_light_positions[i]);
-      lighting_shader.set_vec3(std::format("pointLights[{}].ambient", i),
-                                0.05f, 0.05f, 0.05f);
+                               point_light_positions[i]);
+      lighting_shader.set_vec3(std::format("pointLights[{}].ambient", i), 0.05f,
+                               0.05f, 0.05f);
       lighting_shader.set_vec3(std::format("pointLights[{}].diffuse", i), 0.8f,
-                                0.8f, 0.8f);
-      lighting_shader.set_vec3(std::format("pointLights[{}].specular", i),
-                                1.0f, 1.0f, 1.0f);
+                               0.8f, 0.8f);
+      lighting_shader.set_vec3(std::format("pointLights[{}].specular", i), 1.0f,
+                               1.0f, 1.0f);
       lighting_shader.set_float(std::format("pointLights[{}].constant", i),
-                                 1.0f);
+                                1.0f);
       lighting_shader.set_float(std::format("pointLights[{}].linear", i),
-                                 0.09f);
+                                0.09f);
       lighting_shader.set_float(std::format("pointLights[{}].quadratic", i),
-                                 0.032f);
+                                0.032f);
     }
 
     lighting_shader.set_vec3("spotLight.position", camera.position_);

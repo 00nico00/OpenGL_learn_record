@@ -11,6 +11,7 @@ enum class TextureFormat : uint8_t {
 };
 
 struct TextureArgs {
+  std::string_view uniform_name;
   std::string_view path;
   TextureFormat internal_format;
   TextureFormat format;
@@ -29,8 +30,10 @@ class Texture {
   void bind() const;
   GLuint id() const;
   int unit_index() const;
+  std::string_view unform_name() const;
 
  private:
+  std::string_view uniform_name_;
   GLuint texture_id_{};
   int width_{};
   int height_{};

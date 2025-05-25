@@ -154,11 +154,11 @@ int main() {
           {1, "Normal", glad::ArrtibuteType::Normal},
           {2, "TexCoords", glad::ArrtibuteType::TexCoords}});
 
-  glad::VertexArray cube_vao{};
+  glad::VertexArray<float> cube_vao{};
   cube_vao.bind();
   cube_vao.set_vbo(vertices, layout);
 
-  glad::VertexArray lightcube_vao{};
+  glad::VertexArray<float> lightcube_vao{};
   lightcube_vao.bind();
   lightcube_vao.set_vbo(cube_vao.vbo());
 

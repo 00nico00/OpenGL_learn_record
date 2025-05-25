@@ -161,7 +161,7 @@ int main() {
   v_layout.push_back(glad::VertexAttribute{
       .index = 1, .name = "TexCoords", .type = glad::ArrtibuteType::TexCoords});
 
-  glad::VertexArray vao{};
+  glad::VertexArray<float> vao{};
   vao.bind();
 
   vao.set_vbo(vertices, std::make_shared<glad::VertexBufferLayout>(v_layout));

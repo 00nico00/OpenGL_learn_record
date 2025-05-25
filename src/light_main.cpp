@@ -139,6 +139,13 @@ int main() {
     glm::vec3( 1.5f,  0.2f, -1.5f),
     glm::vec3(-1.3f,  1.0f, -1.5f)
   };
+
+  glm::vec3 point_light_positions[] = {
+    glm::vec3( 0.7f,  0.2f,  2.0f),
+    glm::vec3( 2.3f, -3.3f, -4.0f),
+    glm::vec3(-4.0f,  2.0f, -12.0f),
+    glm::vec3( 0.0f,  0.0f, -3.0f)
+  };
   // clang-format on
 
   auto layout = std::make_shared<glad::VertexBufferLayout>(
@@ -177,21 +184,44 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     lighting_shader.use();
-    lighting_shader.set_vec3("light.position", camera.position_);
-    lighting_shader.set_vec3("light.direction", camera.front_);
-    lighting_shader.set_float("light.cutOff", glm::cos(glm::radians(12.5f)));
-    lighting_shader.set_float("outerCutOff", glm::cos(glm::radians(17.5f)));
     lighting_shader.set_vec3("viewPos", camera.position_);
-
     lighting_shader.set_float("material.shininess", 32.0f);
 
-    lighting_shader.set_vec3("light.ambient", 0.2f, 0.2f, 0.2f);
-    lighting_shader.set_vec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-    lighting_shader.set_vec3("light.specular", 1.0f, 1.0f, 1.0f);
+    // directional light
+    lighting_shader.set_vec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+    lighting_shader.set_vec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+    lighting_shader.set_vec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+    lighting_shader.set_vec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
-    lighting_shader.set_float("light.constant", 1.0f);
-    lighting_shader.set_float("light.linear", 0.09f);
-    lighting_shader.set_float("light.quadratic", 0.032f);
+    for (int i = 0; i < 4; i++) {
+      lighting_shader.set_vec3(std::format("pointLights[{}].position", i),
+                                point_light_positions[i]);
+      lighting_shader.set_vec3(std::format("pointLights[{}].ambient", i),
+                                0.05f, 0.05f, 0.05f);
+      lighting_shader.set_vec3(std::format("pointLights[{}].diffuse", i), 0.8f,
+                                0.8f, 0.8f);
+      lighting_shader.set_vec3(std::format("pointLights[{}].specular", i),
+                                1.0f, 1.0f, 1.0f);
+      lighting_shader.set_float(std::format("pointLights[{}].constant", i),
+                                 1.0f);
+      lighting_shader.set_float(std::format("pointLights[{}].linear", i),
+                                 0.09f);
+      lighting_shader.set_float(std::format("pointLights[{}].quadratic", i),
+                                 0.032f);
+    }
+
+    lighting_shader.set_vec3("spotLight.position", camera.position_);
+    lighting_shader.set_vec3("spotLight.direction", camera.front_);
+    lighting_shader.set_vec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+    lighting_shader.set_vec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+    lighting_shader.set_vec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+    lighting_shader.set_float("spotLight.constant", 1.0f);
+    lighting_shader.set_float("spotLight.linear", 0.09f);
+    lighting_shader.set_float("spotLight.quadratic", 0.032f);
+    lighting_shader.set_float("spotLight.cutOff",
+                              glm::cos(glm::radians(12.5f)));
+    lighting_shader.set_float("spotLight.outerCutOff",
+                              glm::cos(glm::radians(15.0f)));
 
     glm::mat4 projection = glm::perspective(
         glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
@@ -223,7 +253,13 @@ int main() {
     lightcube_shader.set_mat4("model", model);
 
     lightcube_vao.bind();
-    lightcube_vao.draw_arrays(glad::DrawMode::Triangles, 0, 36);
+    for (int i = 0; i < 4; i++) {
+      model = glm::mat4(1.0f);
+      model = glm::translate(model, point_light_positions[i]);
+      model = glm::scale(model, glm::vec3(0.2f));
+      lightcube_shader.set_mat4("model", model);
+      lightcube_vao.draw_arrays(glad::DrawMode::Triangles, 0, 36);
+    }
 
     window.swap_buffers();
     window.poll_events();

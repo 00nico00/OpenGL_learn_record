@@ -90,8 +90,8 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
-  Shader our_shader{"../shader/camera/vertex.sf",
-                    "../shader/camera/fragment.sf"};
+  Shader our_shader{"../shader/camera/vertex.vert",
+                    "../shader/camera/fragment.frag"};
 
   // clang-format off
   float vertices[] = {

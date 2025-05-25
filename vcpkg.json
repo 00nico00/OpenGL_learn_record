@@ -9,6 +9,10 @@
     {
       "name": "glfw3",
       "version>=": "3.3.8#2"
+    },
+    {
+      "name": "assimp",
+      "version>=": "5.4.3"
     }
   ]
 }

@@ -24,7 +24,7 @@ void Mesh::setup_mesh() {
   vao_->unbind();
 }
 
-void Mesh::draw(Shader& shader) {
+void Mesh::draw(const Shader& shader) {
   for (int i = 0; i < textures.size(); i++) {
     auto& texture = textures[i];
     texture.bind();

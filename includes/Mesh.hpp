@@ -25,7 +25,7 @@ class Mesh {
 
   Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
        std::vector<Texture> textures);
-  void draw(Shader& shader);
+  void draw(const Shader& shader);
 
  private:
   std::unique_ptr<glad::VertexArray<Vertex>> vao_{};

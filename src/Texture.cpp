@@ -25,6 +25,7 @@ Texture::Texture(TextureArgs args) {
     GLint internal_format = texture_format(args.internal_format);
     GLint format = texture_format(args.format);
     unit_index_ = init_unit_index();
+    uniform_name_ = args.uniform_name;
 
     glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width_, height_, 0, format,
                  GL_UNSIGNED_BYTE, data);
@@ -55,6 +56,10 @@ GLuint Texture::id() const {
 
 int Texture::unit_index() const {
   return unit_index_;
+}
+
+std::string_view Texture::unform_name() const {
+  return uniform_name_;
 }
 
 GLint Texture::texture_format(TextureFormat format) {

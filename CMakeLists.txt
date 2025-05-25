@@ -15,6 +15,7 @@ set(COMMON_SRCS
   src/Camera.cpp
   src/glad_wrapper.cpp
   src/Texture.cpp
+  src/Mesh.cpp
 )
 
 find_package(glfw3 CONFIG REQUIRED)

@@ -10,8 +10,8 @@
 #include "glad_wrapper.hpp"
 #include "glfw_wrapper.hpp"
 #include "Camera.hpp"
-#include "Logger.hpp"
-#include "Guard.hpp"
+#include "utils/Logger.hpp"
+#include "utils/Guard.hpp"
 #include "Texture.hpp"
 
 static float mix_value = 0.2;

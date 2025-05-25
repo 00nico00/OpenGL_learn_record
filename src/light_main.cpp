@@ -9,8 +9,8 @@
 #include "glfw_wrapper.hpp"
 #include "Camera.hpp"
 #include "glad_wrapper.hpp"
-#include "Logger.hpp"
-#include "Guard.hpp"
+#include "utils/Logger.hpp"
+#include "utils/Guard.hpp"
 
 bool first_mouse = true;
 float last_x = 800.0f / 2.0;

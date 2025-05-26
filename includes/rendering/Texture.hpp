@@ -15,6 +15,7 @@ struct TextureArgs {
   std::string_view path;
   TextureFormat internal_format;
   TextureFormat format;
+  bool auto_format = false;
   bool generate_mipmap = true;
   GLint min_filter = GL_LINEAR;
   GLint mag_filter = GL_LINEAR;
@@ -40,6 +41,9 @@ class Texture {
   int nr_channels_{};
   int unit_index_{};
 
+  std::pair<GLint, GLint> handle_format(bool auto_format, int nr_channels,
+                                        TextureFormat internal_format,
+                                        TextureFormat format);
   GLint texture_format(TextureFormat format);
   static int init_unit_index();
 };

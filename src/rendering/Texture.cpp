@@ -22,8 +22,9 @@ Texture::Texture(TextureArgs args) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, args.wrap_s);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, args.wrap_t);
 
-    GLint internal_format = texture_format(args.internal_format);
-    GLint format = texture_format(args.format);
+    auto [internal_format, format] = handle_format(
+        args.auto_format, nr_channels_, args.internal_format, args.format);
+
     unit_index_ = init_unit_index();
     uniform_name_ = args.uniform_name;
 
@@ -60,6 +61,27 @@ int Texture::unit_index() const {
 
 std::string_view Texture::unform_name() const {
   return uniform_name_;
+}
+
+std::pair<GLint, GLint> Texture::handle_format(bool auto_format,
+                                               int nr_channels,
+                                               TextureFormat internal_format,
+                                               TextureFormat format) {
+  if (auto_format) {
+    if (nr_channels == 1)
+      return {GL_RED, GL_RED};
+
+    if (nr_channels == 3)
+      return {GL_RGB, GL_RGB};
+
+    if (nr_channels == 4)
+      return {GL_RGBA, GL_RGBA};
+
+    throw std::runtime_error(
+        std::format("Unexcepted texture channel: {}", nr_channels));
+  }
+
+  return {texture_format(internal_format), texture_format(format)};
 }
 
 GLint Texture::texture_format(TextureFormat format) {

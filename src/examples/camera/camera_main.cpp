@@ -169,6 +169,7 @@ int main() {
   Texture texture1{
       TextureArgs{.uniform_name = "texture1",
                   .path = "F:\\cpp\\opengl_learn\\Textures\\container.jpg",
+                  .texture_type = TextureType::Diffuse,
                   .internal_format = TextureFormat::RGB,
                   .format = TextureFormat::RGB,
                   .generate_mipmap = true,
@@ -180,6 +181,7 @@ int main() {
   Texture texture2{
       TextureArgs{.uniform_name = "texture2",
                   .path = "F:\\cpp\\opengl_learn\\Textures\\awesomeface.png",
+                  .texture_type = TextureType::Diffuse,
                   .internal_format = TextureFormat::RGBA,
                   .format = TextureFormat::RGBA,
                   .generate_mipmap = true,

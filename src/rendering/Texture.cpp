@@ -25,6 +25,8 @@ Texture::Texture(TextureArgs args) {
     auto [internal_format, format] = handle_format(
         args.auto_format, nr_channels_, args.internal_format, args.format);
 
+    texture_type_ = args.texture_type;
+
     unit_index_ = init_unit_index();
     uniform_name_ = args.uniform_name;
 
@@ -61,6 +63,10 @@ int Texture::unit_index() const {
 
 std::string_view Texture::unform_name() const {
   return uniform_name_;
+}
+
+TextureType Texture::texture_type() const {
+  return texture_type_;
 }
 
 std::pair<GLint, GLint> Texture::handle_format(bool auto_format,

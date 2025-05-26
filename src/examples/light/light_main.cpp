@@ -164,6 +164,7 @@ int main() {
 
   Texture diffuse_texture{TextureArgs{.uniform_name = "material.diffuse",
                                       .path = "../Textures/container2.png",
+                                      .texture_type = TextureType::Diffuse,
                                       .internal_format = TextureFormat::RGBA,
                                       .format = TextureFormat::RGBA,
                                       .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
@@ -171,13 +172,16 @@ int main() {
   Texture specular_texture{
       TextureArgs{.uniform_name = "material.specular",
                   .path = "../Textures/container2_specular.png",
+                  .texture_type = TextureType::Specular,
                   .internal_format = TextureFormat::RGBA,
                   .format = TextureFormat::RGBA,
                   .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
 
   lighting_shader.use();
-  lighting_shader.set_int(diffuse_texture.unform_name(), diffuse_texture.unit_index());
-  lighting_shader.set_int(specular_texture.unform_name(), specular_texture.unit_index());
+  lighting_shader.set_int(diffuse_texture.unform_name(),
+                          diffuse_texture.unit_index());
+  lighting_shader.set_int(specular_texture.unform_name(),
+                          specular_texture.unit_index());
 
   while (!window.should_close()) {
     window.update();

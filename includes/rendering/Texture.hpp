@@ -10,9 +10,15 @@ enum class TextureFormat : uint8_t {
   RED,
 };
 
+enum class TextureType {
+  Diffuse,
+  Specular,
+};
+
 struct TextureArgs {
   std::string_view uniform_name;
   std::string_view path;
+  TextureType texture_type;
   TextureFormat internal_format;
   TextureFormat format;
   bool auto_format = false;
@@ -32,10 +38,12 @@ class Texture {
   GLuint id() const;
   int unit_index() const;
   std::string_view unform_name() const;
+  TextureType texture_type() const;
 
  private:
   std::string_view uniform_name_;
   GLuint texture_id_{};
+  TextureType texture_type_{};
   int width_{};
   int height_{};
   int nr_channels_{};

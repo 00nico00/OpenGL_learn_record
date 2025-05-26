@@ -7,15 +7,28 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories("./includes")
+include_directories("./includes/core")
+include_directories("./includes/rendering")
+include_directories("./includes/scene")
 include_directories("./third_party")
 
-set(COMMON_SRCS
-  src/Shader.cpp
-  src/glfw_wrapper.cpp
-  src/Camera.cpp
-  src/glad_wrapper.cpp
-  src/Texture.cpp
-  src/Mesh.cpp
+set(CORE_SRCS
+  src/core/glfw_wrapper.cpp
+  src/core/glad_wrapper.cpp
+)
+
+set(RENDERING_SRCS
+  src/rendering/Texture.cpp
+  src/rendering/Mesh.cpp
+  src/rendering/Shader.cpp
+)
+
+set(SCENE_SRCS
+  src/scene/Camera.cpp
+)
+
+set(MODEL_SRCS
+  src/rendering/Model.cpp
 )
 
 find_package(glfw3 CONFIG REQUIRED)
@@ -23,13 +36,17 @@ find_package(glad CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
 
 add_executable(camera
-  src/examples/camera_main.cpp
-  ${COMMON_SRCS}
+  src/examples/camera/camera_main.cpp
+  ${CORE_SRCS}
+  ${RENDERING_SRCS}
+  ${SCENE_SRCS}
 )
 target_link_libraries(camera PRIVATE glfw glad::glad)
 
 add_executable(light
-  src/examples/light_main.cpp
-  ${COMMON_SRCS}
+  src/examples/light/light_main.cpp
+  ${CORE_SRCS}
+  ${RENDERING_SRCS}
+  ${SCENE_SRCS}
 )
 target_link_libraries(light PRIVATE glfw glad::glad)

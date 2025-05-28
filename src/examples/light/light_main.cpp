@@ -33,11 +33,10 @@ int main() {
   }
 
   window.disable_cursor();
-  window.set_key_callback(
-      [](glfw::window* self, int key, int scancode, int action, int mods) {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-          self->set_should_close();
-      });
+  window.set_key_callback([](glfw::window* self, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+      self->set_should_close();
+  });
 
   window.set_update_callback([&](glfw::window* self, float delta_time) {
     if (self->is_key_pressed(GLFW_KEY_W))
@@ -50,36 +49,32 @@ int main() {
       camera.process_keyboard(CameraMovement::Right, delta_time);
   });
 
-  window.set_mouse_callback(
-      [&](glfw::window* self, double xpos_in, double ypos_in) {
-        auto xpos = static_cast<float>(xpos_in);
-        auto ypos = static_cast<float>(ypos_in);
+  window.set_mouse_callback([&](glfw::window* self, double xpos_in, double ypos_in) {
+    auto xpos = static_cast<float>(xpos_in);
+    auto ypos = static_cast<float>(ypos_in);
 
-        if (first_mouse) {
-          last_x = xpos;
-          last_y = ypos;
-          first_mouse = false;
-        }
+    if (first_mouse) {
+      last_x = xpos;
+      last_y = ypos;
+      first_mouse = false;
+    }
 
-        float x_offset = xpos - last_x;
-        float y_offset = last_y - ypos;
-        last_x = xpos;
-        last_y = ypos;
+    float x_offset = xpos - last_x;
+    float y_offset = last_y - ypos;
+    last_x = xpos;
+    last_y = ypos;
 
-        camera.process_mouse_movement(x_offset, y_offset);
-      });
+    camera.process_mouse_movement(x_offset, y_offset);
+  });
 
-  window.set_scroll_callback(
-      [&](glfw::window* self, double x_offset, double y_offset) {
-        camera.process_mouse_scroll(static_cast<float>(y_offset));
-      });
+  window.set_scroll_callback([&](glfw::window* self, double x_offset, double y_offset) {
+    camera.process_mouse_scroll(static_cast<float>(y_offset));
+  });
 
   glEnable(GL_DEPTH_TEST);
 
-  Shader lighting_shader{"../shader/light/color.vert",
-                         "../shader/light/color.frag"};
-  Shader lightcube_shader{"../shader/light/light_cube.vert",
-                          "../shader/light/light_cube.frag"};
+  Shader lighting_shader{"../shader/light/color.vert", "../shader/light/color.frag"};
+  Shader lightcube_shader{"../shader/light/light_cube.vert", "../shader/light/light_cube.frag"};
 
   // clang-format off
   float vertices[] = {
@@ -149,10 +144,9 @@ int main() {
   // clang-format on
 
   auto layout = std::make_shared<glad::VertexBufferLayout>(
-      std::vector<glad::VertexAttribute>{
-          {0, "Position", glad::ArrtibuteType::Position},
-          {1, "Normal", glad::ArrtibuteType::Normal},
-          {2, "TexCoords", glad::ArrtibuteType::TexCoords}});
+      std::vector<glad::VertexAttribute>{{0, "Position", glad::ArrtibuteType::Position},
+                                         {1, "Normal", glad::ArrtibuteType::Normal},
+                                         {2, "TexCoords", glad::ArrtibuteType::TexCoords}});
 
   glad::VertexArray<float> cube_vao{};
   cube_vao.bind();
@@ -169,19 +163,16 @@ int main() {
                                       .format = TextureFormat::RGBA,
                                       .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
 
-  Texture specular_texture{
-      TextureArgs{.uniform_name = "material.specular",
-                  .path = "../Textures/container2_specular.png",
-                  .texture_type = TextureType::Specular,
-                  .internal_format = TextureFormat::RGBA,
-                  .format = TextureFormat::RGBA,
-                  .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
+  Texture specular_texture{TextureArgs{.uniform_name = "material.specular",
+                                       .path = "../Textures/container2_specular.png",
+                                       .texture_type = TextureType::Specular,
+                                       .internal_format = TextureFormat::RGBA,
+                                       .format = TextureFormat::RGBA,
+                                       .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
 
   lighting_shader.use();
-  lighting_shader.set_int(diffuse_texture.unform_name(),
-                          diffuse_texture.unit_index());
-  lighting_shader.set_int(specular_texture.unform_name(),
-                          specular_texture.unit_index());
+  lighting_shader.set_int(diffuse_texture.unform_name(), diffuse_texture.unit_index());
+  lighting_shader.set_int(specular_texture.unform_name(), specular_texture.unit_index());
 
   while (!window.should_close()) {
     window.update();
@@ -202,18 +193,12 @@ int main() {
     for (int i = 0; i < 4; i++) {
       lighting_shader.set_vec3(std::format("pointLights[{}].position", i),
                                point_light_positions[i]);
-      lighting_shader.set_vec3(std::format("pointLights[{}].ambient", i), 0.05f,
-                               0.05f, 0.05f);
-      lighting_shader.set_vec3(std::format("pointLights[{}].diffuse", i), 0.8f,
-                               0.8f, 0.8f);
-      lighting_shader.set_vec3(std::format("pointLights[{}].specular", i), 1.0f,
-                               1.0f, 1.0f);
-      lighting_shader.set_float(std::format("pointLights[{}].constant", i),
-                                1.0f);
-      lighting_shader.set_float(std::format("pointLights[{}].linear", i),
-                                0.09f);
-      lighting_shader.set_float(std::format("pointLights[{}].quadratic", i),
-                                0.032f);
+      lighting_shader.set_vec3(std::format("pointLights[{}].ambient", i), 0.05f, 0.05f, 0.05f);
+      lighting_shader.set_vec3(std::format("pointLights[{}].diffuse", i), 0.8f, 0.8f, 0.8f);
+      lighting_shader.set_vec3(std::format("pointLights[{}].specular", i), 1.0f, 1.0f, 1.0f);
+      lighting_shader.set_float(std::format("pointLights[{}].constant", i), 1.0f);
+      lighting_shader.set_float(std::format("pointLights[{}].linear", i), 0.09f);
+      lighting_shader.set_float(std::format("pointLights[{}].quadratic", i), 0.032f);
     }
 
     lighting_shader.set_vec3("spotLight.position", camera.position_);
@@ -224,13 +209,11 @@ int main() {
     lighting_shader.set_float("spotLight.constant", 1.0f);
     lighting_shader.set_float("spotLight.linear", 0.09f);
     lighting_shader.set_float("spotLight.quadratic", 0.032f);
-    lighting_shader.set_float("spotLight.cutOff",
-                              glm::cos(glm::radians(12.5f)));
-    lighting_shader.set_float("spotLight.outerCutOff",
-                              glm::cos(glm::radians(15.0f)));
+    lighting_shader.set_float("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+    lighting_shader.set_float("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
-    glm::mat4 projection = glm::perspective(
-        glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
+    glm::mat4 projection =
+        glm::perspective(glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
     glm::mat4 view = camera.view_matrix();
     lighting_shader.set_mat4("projection", projection);
     lighting_shader.set_mat4("view", view);
@@ -243,8 +226,7 @@ int main() {
       glm::mat4 model{1.0f};
       model = glm::translate(model, cube_positions[i]);
       float angle = 20.0f * i;
-      model =
-          glm::rotate(model, glm::radians(angle), glm::vec3{1.0f, 0.3f, 0.5f});
+      model = glm::rotate(model, glm::radians(angle), glm::vec3{1.0f, 0.3f, 0.5f});
       lighting_shader.set_mat4("model", model);
 
       cube_vao.draw_arrays(glad::DrawMode::Triangles, 0, 36);

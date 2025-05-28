@@ -18,8 +18,7 @@ window::window(std::string_view title, int width, int height)
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-  m_window =
-      glfwCreateWindow(m_width, m_height, m_title.data(), nullptr, nullptr);
+  m_window = glfwCreateWindow(m_width, m_height, m_title.data(), nullptr, nullptr);
   if (!m_window) {
     spdlog::error("Failed to create GLFW window");
     terminate_glfw();
@@ -148,8 +147,8 @@ void window::get_cursor_pos(double& xpos, double& ypos) const {
   glfwGetCursorPos(m_window, &xpos, &ypos);
 }
 
-void window::key_callback_wrapper(GLFWwindow* glfw_window, int key,
-                                  int scancode, int action, int mods) {
+void window::key_callback_wrapper(GLFWwindow* glfw_window, int key, int scancode, int action,
+                                  int mods) {
   if (!glfw_window)
     return;
 
@@ -159,8 +158,7 @@ void window::key_callback_wrapper(GLFWwindow* glfw_window, int key,
   }
 }
 
-void window::cursor_pos_callback_wrapper(GLFWwindow* glfw_window, double xpos,
-                                         double ypos) {
+void window::cursor_pos_callback_wrapper(GLFWwindow* glfw_window, double xpos, double ypos) {
   if (!glfw_window)
     return;
 
@@ -170,8 +168,7 @@ void window::cursor_pos_callback_wrapper(GLFWwindow* glfw_window, double xpos,
   }
 }
 
-void window::scroll_callback_wrapper(GLFWwindow* glfw_window, double xoffset,
-                                     double yoffset) {
+void window::scroll_callback_wrapper(GLFWwindow* glfw_window, double xoffset, double yoffset) {
   if (!glfw_window)
     return;
 
@@ -181,8 +178,7 @@ void window::scroll_callback_wrapper(GLFWwindow* glfw_window, double xoffset,
   }
 }
 
-void window::framebuffer_size_callback_wrapper(GLFWwindow* glfw_window,
-                                               int width, int height) {
+void window::framebuffer_size_callback_wrapper(GLFWwindow* glfw_window, int width, int height) {
   if (!glfw_window)
     return;
 

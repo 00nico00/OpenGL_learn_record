@@ -10,7 +10,6 @@
 #include "glad_wrapper.hpp"
 #include "Texture.hpp"
 
-
 struct Vertex {
   glm::vec3 position;
   glm::vec3 normal;

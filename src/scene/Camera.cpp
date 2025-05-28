@@ -12,8 +12,8 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
   update_camera_vectors();
 }
 
-Camera::Camera(float pos_x, float pos_y, float pos_z, float up_x, float up_y,
-               float up_z, float yaw, float pitch)
+Camera::Camera(float pos_x, float pos_y, float pos_z, float up_x, float up_y, float up_z, float yaw,
+               float pitch)
     : front_(glm::vec3{0.0f, 0.0f, -1.0f}),
       movement_speed_(SPEED),
       mouse_sensitivity_(SENSITIVITY),
@@ -41,8 +41,7 @@ void Camera::process_keyboard(CameraMovement direction, float delta_time) {
     position_ += right_ * velocity;
 }
 
-void Camera::process_mouse_movement(float x_offset, float y_offset,
-                                    GLboolean constrain_pitch) {
+void Camera::process_mouse_movement(float x_offset, float y_offset, GLboolean constrain_pitch) {
   x_offset *= mouse_sensitivity_;
   y_offset *= mouse_sensitivity_;
 

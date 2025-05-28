@@ -13,21 +13,19 @@ auto VertexBufferLayout::end() -> std::vector<VertexAttribute>::iterator {
   return attribute_.end();
 }
 
-auto VertexBufferLayout::cbegin() const
-    -> std::vector<VertexAttribute>::const_iterator {
+auto VertexBufferLayout::cbegin() const -> std::vector<VertexAttribute>::const_iterator {
   return attribute_.cbegin();
 }
 
-auto VertexBufferLayout::cend() const
-    -> std::vector<VertexAttribute>::const_iterator {
+auto VertexBufferLayout::cend() const -> std::vector<VertexAttribute>::const_iterator {
   return attribute_.cend();
 }
 
 IndexBuffer::IndexBuffer(std::span<unsigned int> vertices) {
   glGenBuffers(1, &ID);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertices.size() * sizeof(unsigned int),
-               vertices.data(), GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertices.size() * sizeof(unsigned int), vertices.data(),
+               GL_STATIC_DRAW);
   index_num_ = vertices.size();
 }
 

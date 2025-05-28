@@ -92,8 +92,7 @@ int Shader::compile_shader(ShaderType shader_type, const char* shader_code) {
   return shader;
 }
 
-void Shader::link_shader(unsigned int& shader_id, unsigned int vertex,
-                         unsigned int fragment) {
+void Shader::link_shader(unsigned int& shader_id, unsigned int vertex, unsigned int fragment) {
   shader_id = glCreateProgram();
   glAttachShader(shader_id, vertex);
   glAttachShader(shader_id, fragment);
@@ -133,8 +132,7 @@ void Shader::set_vec3(std::string_view name, const glm::vec3& vec) const {
 }
 
 void Shader::set_mat4(std::string_view name, const glm::mat4& martix) const {
-  glUniformMatrix4fv(glGetUniformLocation(ID, name.data()), 1, GL_FALSE,
-                     glm::value_ptr(martix));
+  glUniformMatrix4fv(glGetUniformLocation(ID, name.data()), 1, GL_FALSE, glm::value_ptr(martix));
 }
 
 void Shader::clear() {

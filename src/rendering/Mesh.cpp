@@ -1,20 +1,16 @@
 #include "Mesh.hpp"
 
-
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
            std::vector<Texture> textures)
-    : vertices(std::move(vertices)),
-      indices(std::move(indices)),
-      textures(std::move(textures)) {
+    : vertices(std::move(vertices)), indices(std::move(indices)), textures(std::move(textures)) {
   setup_mesh();
 }
 
 void Mesh::setup_mesh() {
   auto layout = std::make_shared<glad::VertexBufferLayout>(
-      std::vector<glad::VertexAttribute>{
-          {0, "Position", glad::ArrtibuteType::Position},
-          {1, "Normal", glad::ArrtibuteType::Normal},
-          {2, "TexCoords", glad::ArrtibuteType::TexCoords}});
+      std::vector<glad::VertexAttribute>{{0, "Position", glad::ArrtibuteType::Position},
+                                         {1, "Normal", glad::ArrtibuteType::Normal},
+                                         {2, "TexCoords", glad::ArrtibuteType::TexCoords}});
 
   vao_ = std::make_unique<glad::VertexArray<Vertex>>();
   vao_->bind();

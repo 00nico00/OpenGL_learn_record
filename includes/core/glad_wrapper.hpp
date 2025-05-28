@@ -48,13 +48,11 @@ class VertexBufferLayout {
 template <typename T>
 class VertexBuffer {
  public:
-  VertexBuffer(std::span<T> vertices,
-               std::shared_ptr<VertexBufferLayout> layout)
+  VertexBuffer(std::span<T> vertices, std::shared_ptr<VertexBufferLayout> layout)
       : layout_(std::move(layout)) {
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(T), vertices.data(),
-                 GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(T), vertices.data(), GL_STATIC_DRAW);
 
     calculate_stride();
   }
@@ -64,9 +62,7 @@ class VertexBuffer {
   void bind() { glBindBuffer(GL_ARRAY_BUFFER, ID); }
   void unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-  auto get_vbo_layout() -> std::shared_ptr<VertexBufferLayout> {
-    return layout_;
-  }
+  auto get_vbo_layout() -> std::shared_ptr<VertexBufferLayout> { return layout_; }
   size_t stride() const { return stride_; }
 
  private:
@@ -111,15 +107,12 @@ class VertexArray {
     vertex_buffer_ = std::move(vbo);
     config_arrtibute_pointer();
   }
-  void set_vbo(std::span<T> vertices,
-               std::shared_ptr<VertexBufferLayout> layout) {
+  void set_vbo(std::span<T> vertices, std::shared_ptr<VertexBufferLayout> layout) {
     vertex_buffer_ = std::make_shared<VertexBuffer<T>>(vertices, layout);
     config_arrtibute_pointer();
   }
 
-  void set_ebo(std::shared_ptr<IndexBuffer> ebo) {
-    index_buffer_ = std::move(ebo);
-  }
+  void set_ebo(std::shared_ptr<IndexBuffer> ebo) { index_buffer_ = std::move(ebo); }
   void set_ebo(std::span<unsigned int> vertices) {
     index_buffer_ = std::make_shared<IndexBuffer>(vertices);
   }
@@ -128,9 +121,7 @@ class VertexArray {
     glDrawArrays(draw_mode_map.at(mode), first, count);
   }
 
-  auto vbo() const -> std::shared_ptr<VertexBuffer<T>> {
-    return vertex_buffer_;
-  }
+  auto vbo() const -> std::shared_ptr<VertexBuffer<T>> { return vertex_buffer_; }
   auto ebo() const -> std::shared_ptr<IndexBuffer> { return index_buffer_; }
 
  private:
@@ -149,8 +140,7 @@ class VertexArray {
 
       glVertexAttribPointer(attribute.index, size, GL_FLOAT,
                             attribute.is_normalize ? GL_TRUE : GL_FALSE,
-                            vertex_buffer_->stride() * sizeof(float),
-                            (void*)offset);
+                            vertex_buffer_->stride() * sizeof(float), (void*)offset);
 
       glEnableVertexAttribArray(attribute.index);
       offset += size * sizeof(float);

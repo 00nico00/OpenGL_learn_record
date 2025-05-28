@@ -50,8 +50,7 @@ class Texture {
   int unit_index_{};
 
   std::pair<GLint, GLint> handle_format(bool auto_format, int nr_channels,
-                                        TextureFormat internal_format,
-                                        TextureFormat format);
+                                        TextureFormat internal_format, TextureFormat format);
   GLint texture_format(TextureFormat format);
   static int init_unit_index();
 };

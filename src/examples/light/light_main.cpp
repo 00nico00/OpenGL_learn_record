@@ -20,9 +20,11 @@ glm::vec3 light_pos{1.2f, 1.0f, 2.0f};
 
 int main() {
   Logger::init("light");
-  Guard guard{[] {
-    Logger::shutdown();
-  }};
+  Guard guard{
+    [] {
+      Logger::shutdown();
+    }
+  };
 
   glfw::window window{"light", 800, 600};
   Camera camera{glm::vec3{0.0f, 0.0f, 3.0f}};
@@ -144,9 +146,11 @@ int main() {
   // clang-format on
 
   auto layout = std::make_shared<glad::VertexBufferLayout>(
-      std::vector<glad::VertexAttribute>{{0, "Position", glad::ArrtibuteType::Position},
-                                         {1, "Normal", glad::ArrtibuteType::Normal},
-                                         {2, "TexCoords", glad::ArrtibuteType::TexCoords}});
+    std::vector<glad::VertexAttribute>{
+      {0, "Position", glad::ArrtibuteType::Position},
+      {1, "Normal", glad::ArrtibuteType::Normal},
+      {2, "TexCoords", glad::ArrtibuteType::TexCoords}
+    });
 
   glad::VertexArray<float> cube_vao{};
   cube_vao.bind();
@@ -156,19 +160,27 @@ int main() {
   lightcube_vao.bind();
   lightcube_vao.set_vbo(cube_vao.vbo());
 
-  Texture diffuse_texture{TextureArgs{.uniform_name = "material.diffuse",
-                                      .path = "../Textures/container2.png",
-                                      .texture_type = TextureType::Diffuse,
-                                      .internal_format = TextureFormat::RGBA,
-                                      .format = TextureFormat::RGBA,
-                                      .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
+  Texture diffuse_texture{
+    TextureArgs{
+      .uniform_name = "material.diffuse",
+      .load_path = "../Textures/container2.png",
+      .texture_type = TextureType::Diffuse,
+      .internal_format = TextureFormat::RGBA,
+      .format = TextureFormat::RGBA,
+      .min_filter = GL_LINEAR_MIPMAP_LINEAR
+    }
+  };
 
-  Texture specular_texture{TextureArgs{.uniform_name = "material.specular",
-                                       .path = "../Textures/container2_specular.png",
-                                       .texture_type = TextureType::Specular,
-                                       .internal_format = TextureFormat::RGBA,
-                                       .format = TextureFormat::RGBA,
-                                       .min_filter = GL_LINEAR_MIPMAP_LINEAR}};
+  Texture specular_texture{
+    TextureArgs{
+      .uniform_name = "material.specular",
+      .load_path = "../Textures/container2_specular.png",
+      .texture_type = TextureType::Specular,
+      .internal_format = TextureFormat::RGBA,
+      .format = TextureFormat::RGBA,
+      .min_filter = GL_LINEAR_MIPMAP_LINEAR
+    }
+  };
 
   lighting_shader.use();
   lighting_shader.set_int(diffuse_texture.unform_name(), diffuse_texture.unit_index());
@@ -213,7 +225,7 @@ int main() {
     lighting_shader.set_float("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
     glm::mat4 projection =
-        glm::perspective(glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
+      glm::perspective(glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
     glm::mat4 view = camera.view_matrix();
     lighting_shader.set_mat4("projection", projection);
     lighting_shader.set_mat4("view", view);

@@ -7,8 +7,7 @@ template <typename Func, typename... Args>
   requires std::invocable<Func, Args...>
 struct Guard {
   Guard(Func&& func, Args&&... args) {
-    inner = [func = std::forward<Func>(func),
-             ... args = std::forward<Args>(args)]() mutable {
+    inner = [func = std::forward<Func>(func), ...args = std::forward<Args>(args)]() mutable {
       std::invoke(func, std::move(args)...);
     };
   }
@@ -24,6 +23,6 @@ struct Guard {
   Guard(Guard&&) = delete;
   Guard& operator=(Guard&&) = delete;
 
- private:
+private:
   std::function<void()> inner{};
 };

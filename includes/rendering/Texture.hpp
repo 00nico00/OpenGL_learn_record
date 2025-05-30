@@ -1,8 +1,9 @@
 #pragma once
 
+#include <assimp/types.h>
 #include <glad/glad.h>
 
-#include <string_view>
+#include <string>
 
 enum class TextureFormat : uint8_t {
   RGB,
@@ -13,11 +14,14 @@ enum class TextureFormat : uint8_t {
 enum class TextureType {
   Diffuse,
   Specular,
+  Normal,
+  Height,
 };
 
 struct TextureArgs {
-  std::string_view uniform_name;
-  std::string_view path;
+  std::string uniform_name;
+  std::string load_path;
+  std::string cmp_path;
   TextureType texture_type;
   TextureFormat internal_format;
   TextureFormat format;
@@ -30,7 +34,7 @@ struct TextureArgs {
 };
 
 class Texture {
- public:
+public:
   explicit Texture(TextureArgs args);
   ~Texture();
 
@@ -39,11 +43,14 @@ class Texture {
   int unit_index() const;
   std::string_view unform_name() const;
   TextureType texture_type() const;
+  std::string_view cmp_path() const;
 
- private:
-  std::string_view uniform_name_;
+private:
+  std::string uniform_name_;
   GLuint texture_id_{};
   TextureType texture_type_{};
+  std::string load_path_{};
+  std::string cmp_path_{};
   int width_{};
   int height_{};
   int nr_channels_{};

@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include <string_view>
+#include <string>
 
 enum class ShaderType : uint8_t {
   Vertex,
@@ -11,7 +11,7 @@ enum class ShaderType : uint8_t {
 };
 
 class Shader {
- private:
+private:
   constexpr static int INFO_BUF_SIZE = 512;
   bool is_delete = false;
 
@@ -19,7 +19,7 @@ class Shader {
   int compile_shader(ShaderType shader_type, const char* shader_code);
   void link_shader(unsigned int& shader_id, unsigned int vertex, unsigned int fragment);
 
- public:
+public:
   unsigned int ID;
 
   Shader(std::string_view vertex_path, std::string_view fragment_path);

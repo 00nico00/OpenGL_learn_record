@@ -2,8 +2,8 @@
 
 using namespace glad;
 
-VertexBufferLayout::VertexBufferLayout(std::vector<VertexAttribute> attribute)
-    : attribute_(std::move(attribute)) {}
+VertexBufferLayout::VertexBufferLayout(std::vector<VertexAttribute> attribute) :
+  attribute_(std::move(attribute)) {}
 
 auto VertexBufferLayout::begin() -> std::vector<VertexAttribute>::iterator {
   return attribute_.begin();

@@ -23,9 +23,11 @@ float last_y = 600.0 / 2.0;
 
 int main() {
   Logger::init("camera");
-  Guard guard{[] {
-    Logger::shutdown();
-  }};
+  Guard guard{
+    [] {
+      Logger::shutdown();
+    }
+  };
 
   glfw::window window{"Learn OpenGL", 800, 600};
   window.disable_cursor();
@@ -151,38 +153,48 @@ int main() {
   // clang-format on
 
   std::vector<glad::VertexAttribute> v_layout;
-  v_layout.push_back(
-      glad::VertexAttribute{.index = 0, .name = "Position", .type = glad::ArrtibuteType::Position});
+  v_layout.push_back(glad::VertexAttribute{
+    .index = 0, .name = "Position", .type = glad::ArrtibuteType::Position
+  });
 
   v_layout.push_back(glad::VertexAttribute{
-      .index = 1, .name = "TexCoords", .type = glad::ArrtibuteType::TexCoords});
+    .index = 1, .name = "TexCoords", .type = glad::ArrtibuteType::TexCoords
+  });
 
   glad::VertexArray<float> vao{};
   vao.bind();
 
   vao.set_vbo(vertices, std::make_shared<glad::VertexBufferLayout>(v_layout));
 
-  Texture texture1{TextureArgs{.uniform_name = "texture1",
-                               .path = "F:\\cpp\\opengl_learn\\Textures\\container.jpg",
-                               .texture_type = TextureType::Diffuse,
-                               .internal_format = TextureFormat::RGB,
-                               .format = TextureFormat::RGB,
-                               .generate_mipmap = true,
-                               .min_filter = GL_LINEAR,
-                               .mag_filter = GL_LINEAR,
-                               .wrap_s = GL_REPEAT,
-                               .wrap_t = GL_REPEAT}};
+  Texture texture1{
+    TextureArgs{
+      .uniform_name = "texture1",
+      .load_path = "F:\\cpp\\opengl_learn\\Textures\\container.jpg",
+      .texture_type = TextureType::Diffuse,
+      .internal_format = TextureFormat::RGB,
+      .format = TextureFormat::RGB,
+      .generate_mipmap = true,
+      .min_filter = GL_LINEAR,
+      .mag_filter = GL_LINEAR,
+      .wrap_s = GL_REPEAT,
+      .wrap_t = GL_REPEAT
+    }
+  };
 
-  Texture texture2{TextureArgs{.uniform_name = "texture2",
-                               .path = "F:\\cpp\\opengl_learn\\Textures\\awesomeface.png",
-                               .texture_type = TextureType::Diffuse,
-                               .internal_format = TextureFormat::RGBA,
-                               .format = TextureFormat::RGBA,
-                               .generate_mipmap = true,
-                               .min_filter = GL_LINEAR,
-                               .mag_filter = GL_LINEAR,
-                               .wrap_s = GL_REPEAT,
-                               .wrap_t = GL_REPEAT}};
+  Texture texture2{
+    TextureArgs{
+      .uniform_name = "texture2",
+      .load_path = "F:\\cpp\\opengl_learn\\Textures\\awesomeface.png",
+      .texture_type = TextureType::Diffuse,
+      .internal_format = TextureFormat::RGBA,
+      .format = TextureFormat::RGBA,
+      .generate_mipmap = true,
+      .min_filter = GL_LINEAR,
+      .mag_filter = GL_LINEAR,
+      .wrap_s = GL_REPEAT,
+      .wrap_t = GL_REPEAT
+    }
+  };
 
   our_shader.use();
   our_shader.set_int(texture1.unform_name(), texture1.unit_index());
@@ -200,7 +212,7 @@ int main() {
     our_shader.set_float("mixValue", mix_value);
 
     glm::mat4 projection =
-        glm::perspective(glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
+      glm::perspective(glm::radians(camera.zoom_), window.aspect_ratio(), 0.1f, 100.0f);
     our_shader.set_mat4("projection", projection);
 
     our_shader.set_mat4("view", camera.view_matrix());

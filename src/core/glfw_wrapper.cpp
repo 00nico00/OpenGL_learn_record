@@ -6,9 +6,8 @@ using namespace glfw;
 
 bool window::glfw_initialized = false;
 
-window::window(std::string_view title, int width, int height)
-    : m_title(title), m_width(width), m_height(height) {
-
+window::window(std::string_view title, int width, int height) :
+  m_width(width), m_height(height), m_title(title) {
   init_glfw();
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

@@ -9,7 +9,7 @@
 namespace fs = std::filesystem;
 
 class Logger {
- public:
+public:
   static void init(std::string_view log_name) {
     try {
       fs::path log_dir = "../logs";
@@ -20,18 +20,20 @@ class Logger {
       std::string log_file = (log_dir / fmt::format("{}.log", log_name)).string();
 
       auto console_sink =
-          std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-      auto file_sink = spdlog::rotating_logger_mt("file_logger", log_file,
-                                                  3 * 1024 * 1024, 1)
-                           ->sinks()[0];
+        std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+      auto file_sink = spdlog::rotating_logger_mt(
+          "file_logger",
+          log_file,
+          3 * 1024 * 1024,
+          1)
+        ->sinks()[0];
 
-      console_sink->set_pattern(
-          "[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [thread %t] %v");
+      console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [thread %t] %v");
       file_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [thread %t] %v");
 
       std::vector<spdlog::sink_ptr> sinks{console_sink, file_sink};
       auto logger = std::make_shared<spdlog::logger>(
-          "multi_sink", sinks.begin(), sinks.end());
+        "multi_sink", sinks.begin(), sinks.end());
 
       logger->set_level(spdlog::level::info);
 

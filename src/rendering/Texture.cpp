@@ -6,11 +6,10 @@
 #include <stdexcept>
 #include <format>
 
-#include "utils/Unreachable.hpp"
-
-Texture::Texture(TextureArgs args) {
+Texture::Texture(TextureArgs args)
+  : load_path_(std::move(args.load_path)), cmp_path_(std::move(args.cmp_path)) {
   stbi_set_flip_vertically_on_load(true);
-  unsigned char* data = stbi_load(args.path.data(), &width_, &height_, &nr_channels_, 0);
+  unsigned char* data = stbi_load(load_path_.c_str(), &width_, &height_, &nr_channels_, 0);
 
   if (data) {
     glGenTextures(1, &texture_id_);
@@ -22,15 +21,15 @@ Texture::Texture(TextureArgs args) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, args.wrap_t);
 
     auto [internal_format, format] =
-        handle_format(args.auto_format, nr_channels_, args.internal_format, args.format);
+      handle_format(args.auto_format, nr_channels_, args.internal_format, args.format);
 
     texture_type_ = args.texture_type;
 
     unit_index_ = init_unit_index();
     uniform_name_ = args.uniform_name;
 
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width_, height_, 0, format, GL_UNSIGNED_BYTE,
-                 data);
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format,
+                 width_, height_, 0, format, GL_UNSIGNED_BYTE, data);
 
     if (args.generate_mipmap) {
       glGenerateMipmap(GL_TEXTURE_2D);
@@ -38,7 +37,7 @@ Texture::Texture(TextureArgs args) {
 
     stbi_image_free(data);
   } else {
-    throw std::runtime_error(std::format("Failed to load texture: {}", args.path));
+    throw std::runtime_error(std::format("Failed to load texture: {}", load_path_));
   }
 }
 
@@ -65,6 +64,10 @@ std::string_view Texture::unform_name() const {
 
 TextureType Texture::texture_type() const {
   return texture_type_;
+}
+
+std::string_view Texture::cmp_path() const {
+  return cmp_path_;
 }
 
 std::pair<GLint, GLint> Texture::handle_format(bool auto_format, int nr_channels,
@@ -98,9 +101,8 @@ GLint Texture::texture_format(TextureFormat format) {
       return GL_RGBA;
       break;
     default:
-      unreachable();
+      std::unreachable();
   }
-  unreachable();
 }
 
 int Texture::init_unit_index() {

@@ -6,9 +6,8 @@
 #include <functional>
 
 namespace glfw {
-
 class window {
- public:
+public:
   using key_callback = std::function<void(window*, int, int, int, int)>;
   using mouse_callback = std::function<void(window*, double, double)>;
   using scroll_callback = std::function<void(window*, double, double)>;
@@ -49,11 +48,11 @@ class window {
   bool is_mouse_button_pressed(int button) const;
   void get_cursor_pos(double& xpos, double& ypos) const;
 
- public:
+public:
   float delta_time{};
   float last_frame{};
 
- private:
+private:
   GLFWwindow* m_window{};
 
   int m_width{};
@@ -77,5 +76,4 @@ class window {
   static void scroll_callback_wrapper(GLFWwindow* glfw_window, double xoffset, double yoffset);
   static void framebuffer_size_callback_wrapper(GLFWwindow* glfw_window, int width, int height);
 };
-
-}  // namespace glfw
+} // namespace glfw

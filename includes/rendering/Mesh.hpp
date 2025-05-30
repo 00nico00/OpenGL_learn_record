@@ -17,7 +17,7 @@ struct Vertex {
 };
 
 class Mesh {
- public:
+public:
   std::vector<Vertex> vertices{};
   std::vector<unsigned int> indices{};
   std::vector<Texture> textures{};
@@ -26,7 +26,7 @@ class Mesh {
        std::vector<Texture> textures);
   void draw(const Shader& shader);
 
- private:
+private:
   std::unique_ptr<glad::VertexArray<Vertex>> vao_{};
   void setup_mesh();
 };

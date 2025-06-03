@@ -158,7 +158,8 @@ private:
 
       glVertexAttribPointer(attribute.index, size, GL_FLOAT,
                             attribute.is_normalize ? GL_TRUE : GL_FALSE,
-                            vertex_buffer_->stride() * sizeof(float), (void*)offset);
+                            vertex_buffer_->stride() * sizeof(float),
+                            reinterpret_cast<void*>(static_cast<uintptr_t>(offset)));
 
       glEnableVertexAttribArray(attribute.index);
       offset += size * sizeof(float);

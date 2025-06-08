@@ -5,7 +5,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.hpp"
-#include "Texture.hpp"
 #include "glfw_wrapper.hpp"
 #include "Camera.hpp"
 #include "glad_wrapper.hpp"

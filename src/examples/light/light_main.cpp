@@ -75,8 +75,14 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
-  Shader lighting_shader{"../shader/light/color.vert", "../shader/light/color.frag"};
-  Shader lightcube_shader{"../shader/light/light_cube.vert", "../shader/light/light_cube.frag"};
+  Shader lighting_shader{
+    "../../shader/light/color.vert",
+    "../../shader/light/color.frag"}
+  ;
+  Shader lightcube_shader{
+    "../../shader/light/light_cube.vert",
+    "../../shader/light/light_cube.frag"
+  };
 
   // clang-format off
   float vertices[] = {
@@ -163,7 +169,7 @@ int main() {
   Texture diffuse_texture{
     TextureArgs{
       .uniform_name = "material.diffuse",
-      .load_path = "../Textures/container2.png",
+      .load_path = "../../Textures/container2.png",
       .texture_type = TextureType::Diffuse,
       .internal_format = TextureFormat::RGBA,
       .format = TextureFormat::RGBA,
@@ -174,7 +180,7 @@ int main() {
   Texture specular_texture{
     TextureArgs{
       .uniform_name = "material.specular",
-      .load_path = "../Textures/container2_specular.png",
+      .load_path = "../../Textures/container2_specular.png",
       .texture_type = TextureType::Specular,
       .internal_format = TextureFormat::RGBA,
       .format = TextureFormat::RGBA,

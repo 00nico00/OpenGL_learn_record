@@ -46,6 +46,9 @@ add_executable(camera
     ${SCENE_SRCS}
 )
 target_link_libraries(camera PRIVATE glfw glad::glad)
+set_target_properties(camera PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/camera"
+)
 
 add_executable(light
     src/examples/light/light_main.cpp
@@ -54,6 +57,9 @@ add_executable(light
     ${SCENE_SRCS}
 )
 target_link_libraries(light PRIVATE glfw glad::glad)
+set_target_properties(light PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/light"
+)
 
 add_executable(model
     src/examples/model/model_main.cpp
@@ -62,4 +68,7 @@ add_executable(model
     ${SCENE_SRCS}
     ${MODEL_SRCS}
 )
-target_link_libraries(model PRIVATE glfw glad::glad)
+target_link_libraries(model PRIVATE glfw glad::glad assimp::assimp)
+set_target_properties(model PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/model"
+)

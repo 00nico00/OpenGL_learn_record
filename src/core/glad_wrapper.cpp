@@ -45,6 +45,6 @@ size_t IndexBuffer::index_num() const {
   return index_num_;
 }
 
-void enable_depth_test() {
+void glad::enable_depth_test() {
   glEnable(GL_DEPTH_TEST);
 }

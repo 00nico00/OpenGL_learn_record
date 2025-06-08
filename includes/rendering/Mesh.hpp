@@ -10,20 +10,27 @@
 #include "glad_wrapper.hpp"
 #include "Texture.hpp"
 
+constexpr int MAX_BONE_INFLUENCE = 4;
+
 struct Vertex {
-  glm::vec3 position;
-  glm::vec3 normal;
-  glm::vec2 texCoords;
+  glm::vec3 Position;
+  glm::vec3 Normal;
+  glm::vec2 TexCoords;
+  glm::vec3 Tangent;
+  glm::vec3 Bitangent;
+  int m_BoneIDs[MAX_BONE_INFLUENCE];
+  float w_Weights[MAX_BONE_INFLUENCE];
 };
 
 class Mesh {
 public:
   std::vector<Vertex> vertices{};
   std::vector<unsigned int> indices{};
-  std::vector<Texture> textures{};
+  // avoid generate the same texture id
+  std::vector<std::shared_ptr<Texture>> textures{};
 
   Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
-       std::vector<Texture> textures);
+       std::vector<std::shared_ptr<Texture>> textures);
   void draw(const Shader& shader);
 
 private:

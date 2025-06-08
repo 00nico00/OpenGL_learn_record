@@ -121,12 +121,12 @@ public:
 
   void set_vbo(std::shared_ptr<VertexBuffer<T>> vbo) {
     vertex_buffer_ = std::move(vbo);
-    config_arrtibute_pointer();
+    config_attribute_pointer();
   }
 
   void set_vbo(std::span<T> vertices, std::shared_ptr<VertexBufferLayout> layout) {
     vertex_buffer_ = std::make_shared<VertexBuffer<T>>(vertices, layout);
-    config_arrtibute_pointer();
+    config_attribute_pointer();
   }
 
   void set_ebo(std::shared_ptr<IndexBuffer> ebo) { index_buffer_ = std::move(ebo); }
@@ -151,7 +151,7 @@ private:
     {DrawMode::Triangles, GL_TRIANGLES},
   };
 
-  void config_arrtibute_pointer() {
+  void config_attribute_pointer() {
     int offset{};
     for (auto attribute : *vertex_buffer_->get_vbo_layout()) {
       auto size = static_cast<uint8_t>(attribute.type);

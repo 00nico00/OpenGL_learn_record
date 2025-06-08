@@ -16,6 +16,10 @@ enum class ArrtibuteType : uint8_t {
   Color = 3,
   Normal = 3,
   TexCoords = 2,
+  Tangent = 3,
+  Bitangent = 3,
+  BonesID = 4,
+  Weight = 4,
 };
 
 enum class DrawMode : uint8_t {
@@ -28,6 +32,7 @@ struct VertexAttribute {
   std::string_view name;
   ArrtibuteType type;
   bool is_normalize{false};
+  GLenum data_type{GL_FLOAT};
 };
 
 class VertexBufferLayout {
@@ -156,12 +161,12 @@ private:
     for (auto attribute : *vertex_buffer_->get_vbo_layout()) {
       auto size = static_cast<uint8_t>(attribute.type);
 
-      glVertexAttribPointer(attribute.index, size, GL_FLOAT,
+      glEnableVertexAttribArray(attribute.index);
+      glVertexAttribPointer(attribute.index, size, attribute.data_type,
                             attribute.is_normalize ? GL_TRUE : GL_FALSE,
                             vertex_buffer_->stride() * sizeof(float),
                             reinterpret_cast<void*>(static_cast<uintptr_t>(offset)));
 
-      glEnableVertexAttribArray(attribute.index);
       offset += size * sizeof(float);
     }
   }

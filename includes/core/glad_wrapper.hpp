@@ -166,4 +166,6 @@ private:
     }
   }
 };
+
+void enable_depth_test();
 } // namespace glad

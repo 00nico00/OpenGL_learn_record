@@ -27,8 +27,7 @@ void Mesh::setup_mesh() {
 }
 
 void Mesh::draw(const Shader& shader) {
-  for (int i = 0; i < textures.size(); i++) {
-    auto& texture = textures[i];
+  for (auto& texture : textures) {
     texture->bind();
     shader.set_int(texture->unform_name(), texture->unit_index());
   }
